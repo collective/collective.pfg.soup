@@ -1,0 +1,27 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="collective.pfg.soup">
+
+    <includeDependencies package="."/>
+
+    <five:registerPackage package="." initialize=".initialize" />
+
+    <class class=".adapter.SoupAdapter"/>
+<!--  
+    <subscriber for=".interfaces.ISoupAdapter
+                     Products.Archetypes.interfaces.IObjectInitializedEvent"
+                handler=".subscribers.init_soup"
+    />
+-->
+    <!-- Register the installation GenericSetup extension profile -->
+    <genericsetup:registerProfile
+        name="default"
+        title="Soup Adapter for PloneFormGen"
+        directory="profile"
+        description="A PloneFormGen adapter to save form data in a Soup"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+</configure>
