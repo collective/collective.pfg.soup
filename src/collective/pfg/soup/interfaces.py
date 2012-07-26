@@ -1,9 +1,14 @@
 from zope.interface import Interface
 
 
+class IPfgSoupAdapter(Interface):
+    """marker for a pfg soup adapter
+    """
+
+
 class IAddPfgIndex(Interface):
 
-    class __call__(catalog):
+    def __call__(catalog):
         """adds an repoze.catalog compatible index to given catalog,
         context is supoosed to be a PFG Field.
         """

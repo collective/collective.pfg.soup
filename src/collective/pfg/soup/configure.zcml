@@ -9,13 +9,12 @@
     <five:registerPackage package="." initialize=".initialize" />
 
     <class class=".adapter.SoupAdapter"/>
-<!--  
-    <subscriber for=".interfaces.ISoupAdapter
-                     Products.Archetypes.interfaces.IObjectInitializedEvent"
-                handler=".subscribers.init_soup"
+    
+    <subscriber for=".interfaces.IPfgSoupAdapter
+                   Products.Archetypes.interfaces.IObjectInitializedEvent"
+              handler=".subscribers.create_catalogfactory"
     />
--->
-    <!-- Register the installation GenericSetup extension profile -->
+    
     <genericsetup:registerProfile
         name="default"
         title="Soup Adapter for PloneFormGen"
@@ -23,5 +22,13 @@
         description="A PloneFormGen adapter to save form data in a Soup"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
+        
+    <!-- register index adapters -->
+    <adapter factory=".indexadapters.FieldIndexCreator" 
+             for="Products.PloneFormGen.content.fields.FGStringField" />    
+    <adapter factory=".indexadapters.TextIndexCreator" 
+             for="Products.PloneFormGen.content.fields.FGTextField" />    
+    <adapter factory=".indexadapters.KeywordIndexCreator" 
+             for="Products.PloneFormGen.content.fields.FGLinesField" />    
 
 </configure>

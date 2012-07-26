@@ -10,7 +10,7 @@ from .adapter import SoupAdapter
 @implementer(ICatalogFactory)
 class PfgCatalogFactory(object):
 
-    def __call_(self, context):
+    def __call__(self, context):
         if not isinstance(context, SoupAdapter):
             raise ValueError('Current context must be a SoupAdapter')
         pfg = aq_parent(context)

@@ -1,23 +1,24 @@
+from zope.interface import implementer
 from AccessControl import ClassSecurityInfo
-from zope.contenttype import guess_content_type
-from ZPublisher.HTTPRequest import FileUpload
-from Products.Archetypes.public import (
-    Schema,
-)
+from Products.Archetypes.public import Schema
 from Products.ATContentTypes.content.base import registerATCT
 from Products.PloneFormGen.content.actionAdapter import (
     FormActionAdapter,
     FormAdapterSchema,
 )
+from node.ext.zodb import OOBTNode
+from souper.soup import get_soup
 from collective.pfg.soup import _
 from collective.pfg.soup.config import PROJECTNAME
+from .interfaces import IPfgSoupAdapter
 
 import logging
 logger = logging.getLogger("PloneFormGen")
 
 
+@implementer(IPfgSoupAdapter)
 class SoupAdapter(FormActionAdapter):
-    """A form action adapter that will save form input data in a soup.
+    """A form action adapter storing form input data in a soup.
     """
 
     schema = FormAdapterSchema.copy() + Schema((
@@ -27,37 +28,30 @@ class SoupAdapter(FormActionAdapter):
 
     security = ClassSecurityInfo()
 
+    @property
+    def _soup_name(self):
+        return 'PFGSOUP%s' % self.UID()
+
+    def get_soup(self):
+        return get_soup(self._soup_name, self)
+
     def onSuccess(self, fields, REQUEST=None, loopstop=False):
         """
         saves data.
         """
-        # XXX below store to soup
-        data = []
-        for f in fields:
-            if f.isFileField():
-                file = REQUEST.form.get('%s_file' % f.fgField.getName())
-                if isinstance(file, FileUpload) and file.filename != '':
-                    file.seek(0)
-                    fdata = file.read()
-                    filename = file.filename
-                    mimetype, enc = guess_content_type(filename, fdata, None)
-                    if mimetype.find('text/') >= 0:
-                        # convert to native eols
-                        fdata = fdata.replace('\x0d\x0a', '\n').replace('\x0a', '\n').replace('\x0d', '\n')
-                        data.append('%s:%s:%s:%s' % (filename, mimetype, enc, fdata))
-                    else:
-                        data.append('%s:%s:%s:Binary upload discarded' % (filename, mimetype, enc))
-                else:
-                    data.append('NO UPLOAD')
-            elif not f.isLabel():
-                val = REQUEST.form.get(f.fgField.getName(), '')
-                if not isinstance(val, basestring):
-                    # Zope has marshalled the field into
-                    # something other than a string
-                    val = str(val)
-                data.append(val)
-
-        self._addDataRow(data)
-
+        soup = self.get_soup()
+        data = OOBTNode()
+        for field in fields:
+            if field.isLabel():
+                continue
+            field_name = field.fgField.getName()
+            if field.isFileField():
+                file_value = REQUEST.form.get('%s_file' % field_name)
+                raise NotImplementedError('Not Yet Done')
+            value = REQUEST.form.get(field_name, '')
+            if not isinstance(value, basestring):
+                value = str(value)
+            data.attrs[field_name] = value
+        soup.add(data)
 
 registerATCT(SoupAdapter, PROJECTNAME)
