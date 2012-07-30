@@ -15,7 +15,7 @@ class PfgCatalogFactory(object):
             raise ValueError('Current context must be a SoupAdapter')
         pfg = aq_parent(context)
         catalog = Catalog()
-        for field in pfg.fgFields():
+        for field in pfg._getFieldObjects():
             pfgindexadder = queryAdapter(field, IAddPfgIndex)
             if pfgindexadder is None:
                 continue

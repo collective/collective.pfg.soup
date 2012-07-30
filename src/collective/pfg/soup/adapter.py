@@ -28,6 +28,9 @@ class SoupAdapter(FormActionAdapter):
 
     security = ClassSecurityInfo()
 
+    def exclude_from_nav(self):
+        return True
+
     @property
     def _soup_name(self):
         return 'PFGSOUP%s' % self.UID()
@@ -44,7 +47,7 @@ class SoupAdapter(FormActionAdapter):
         for field in fields:
             if field.isLabel():
                 continue
-            field_name = field.fgField.getName()
+            field_name = field.getFieldFormName()
             if field.isFileField():
                 file_value = REQUEST.form.get('%s_file' % field_name)
                 raise NotImplementedError('Not Yet Done')

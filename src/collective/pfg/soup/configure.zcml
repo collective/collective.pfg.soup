@@ -4,13 +4,13 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     i18n_domain="collective.pfg.soup">
 
-    <includeDependencies package="."/>
+    <includeDependencies package="." />
     
-    <include package=".browser">
-
-    <five:registerPackage package="." initialize=".initialize" />
+    <include package=".browser" />    
 
     <class class=".adapter.SoupAdapter"/>
+
+    <five:registerPackage package="." />
     
     <subscriber for=".interfaces.IPfgSoupAdapter
                    Products.Archetypes.interfaces.IObjectInitializedEvent"

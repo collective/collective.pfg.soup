@@ -1,0 +1,35 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone">
+
+<body>
+
+<metal:main fill-slot="main">
+  <tal:main-macro metal:define-macro="main">
+    
+    <h1 class="documentFirstHeading">Form Data Manager</h1>
+    
+    <table id="pfgsoupdata"
+           tal:attributes="data-ajaxurl python:context.absolute_url()+'/@@pfgsoupdata'">
+        <thead>
+           <tr>
+             <tal:loop repeat="rowinfo view/rows">
+               <th tal:attributes="class python:'datarow-'+rowinfo[1];">
+                   <span tal:replace="python:rowinfo[0]">Title</span>
+               </th>
+             </tal:loop>
+           </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+  </tal:main-macro>
+</metal:main>
+
+</body>
+</html>

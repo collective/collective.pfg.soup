@@ -1,11 +1,42 @@
-<configure
-    xmlns="http://namespaces.zope.org/zope"
-    xmlns:browser="http://namespaces.zope.org/browser"
-    i18n_domain="collective.pfg.soup">
+<?xml version="1.0" encoding="UTF-8"?>
+<configure xmlns="http://namespaces.zope.org/zope"
+	xmlns:browser="http://namespaces.zope.org/browser" 
+	i18n_domain="collective.pfg.soup">
     
   <browser:resourceDirectory
       name="collective.pfg.soup"
       directory="resources"
    />
+   
+  <browser:page
+    for="..interfaces.IPfgSoupAdapter"
+    name="table"
+    class=".table.TableView"
+    template="table.pt"
+    permission="cmf.ModifyPortalContent"
+  />   
+
+  <browser:page
+    for="..interfaces.IPfgSoupAdapter"
+    name="pfgsoupdata"
+    class=".table.TableDataView"
+    permission="cmf.ModifyPortalContent"
+  />   
+
+  <browser:page
+    for="Products.PloneFormGen.interfaces.IPloneFormGenForm"
+    name="has_soupadapter"
+    class=".action.CheckView"
+    attribute="has_soupadapter"
+    permission="zope2.View"
+  />   
+
+  <browser:page
+    for="Products.PloneFormGen.interfaces.IPloneFormGenForm"
+    name="get_soupadapter_url"
+    class=".action.CheckView"
+    attribute="get_soupadapter_url"
+    permission="zope2.View"
+  />   
    
 </configure>

@@ -4,4 +4,10 @@
   <property name="allowed_content_types" purge="False">
     <element value="SoupAdapter"/>
   </property>
+ <action title="Form Data" action_id="soupformdata" category="object"
+    condition_expr="object/@@has_soupadapter"
+    icon_expr="" link_target="" url_expr="string:${object/@@get_soupadapter_url}"
+    visible="True">  
+   <permission value="Modify portal content"/>
+ </action>
 </object>
