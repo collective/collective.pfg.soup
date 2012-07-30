@@ -5,6 +5,8 @@
     i18n_domain="collective.pfg.soup">
 
     <includeDependencies package="."/>
+    
+    <include package=".browser">
 
     <five:registerPackage package="." initialize=".initialize" />
 
