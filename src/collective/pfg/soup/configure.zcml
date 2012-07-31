@@ -26,7 +26,7 @@
         />
         
     <!-- register index adapters -->
-    <adapter factory=".indexadapters.FieldIndexCreator" 
+    <adapter factory=".indexadapters.TextIndexCreator" 
              for="Products.PloneFormGen.content.fields.FGStringField" />    
     <adapter factory=".indexadapters.TextIndexCreator" 
              for="Products.PloneFormGen.content.fields.FGTextField" />    

@@ -25,7 +25,22 @@
            </tr>
         </thead>
         <tbody>
+            <tr>
+              <td tal:attributes="rowspan: python:len(view.rows())">Bitte warte. Lade Daten...</td>
+            </tr>  
         </tbody>
+        <tfoot>
+           <tr>
+             <tal:loop repeat="rowinfo view/rows">
+               <th>
+                   <input type="text" class="search_init" value="Search engines" name="search_engine"                          
+                          tal:attributes="value python:'Suche in '+ rowinfo[0];
+                                          name python:rowinfo[0];" >
+               </th>
+             </tal:loop>
+           </tr>
+        </tfoot>
+        
     </table>
 
   </tal:main-macro>
