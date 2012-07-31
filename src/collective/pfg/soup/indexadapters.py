@@ -16,9 +16,17 @@ class BaseIndexCreator(object):
         field_id = self.field.getId()
         indexer = NodeAttributeIndexer(field_id)
         catalog[field_id] = self.create(indexer)
+        sort_index = self.create_sort(indexer)
+        if sort_index is None:
+            return
+        sort_id = '_sort_%s' % field_id
+        catalog[sort_id] = sort_index
 
     def create(self, indexer):
         raise NotImplementedError('Base class only')
+
+    def create_sort(self, indexer):
+        return None
 
 
 class FieldIndexCreator(BaseIndexCreator):
@@ -30,7 +38,11 @@ class FieldIndexCreator(BaseIndexCreator):
 class TextIndexCreator(BaseIndexCreator):
 
     def create(self, indexer):
+        # XXX use txng here if available
         return CatalogTextIndex(indexer)
+
+    def create_sort(self, indexer):
+        return CatalogFieldIndex(indexer)
 
 
 class KeywordIndexCreator(BaseIndexCreator):

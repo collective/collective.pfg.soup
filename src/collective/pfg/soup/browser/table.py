@@ -28,11 +28,46 @@ class TableDataView(TableView):
     """datatables json data
     """
 
+    def _extract_sort(self):
+        sortparams = dict()
+        rows = self.rows()
+        # sortingcols and sortable are not used for now, but to be complete
+        # it gets extracted
+        sortparams['sortingcols'] = self.request.form.get('iSortingCols')
+        sortparams['sortable'] = dict()
+        sortparams['reverse'] = False
+        sortcols_idx = 0
+        sortparams['index'] = rows[sortcols_idx][1]
+        sortparams['altindex'] = '_sort_%s' % sortparams['index']
+        for idx in range(0, len(rows)):
+            col = int(self.request.form.get('iSortCol_%d' % idx, 0))
+            if col:
+                sortcols_idx = idx
+                sortparams['index'] = rows[idx][1]
+            sabl = self.request.form.get('bSortable_%d' % sortcols_idx,
+                                         'false')
+            sortparams['sortable'][rows[idx][1]] = sabl == 'true'
+        sdir = self.request.form.get('sSortDir_%d' % sortcols_idx, 'asc')
+        sortparams['reverse'] = sdir == 'desc'
+        return sortparams
+
     def _alldata(self, soup):
         data = soup.storage.data
+        sort = self._extract_sort()
+        try:
+            iids = soup.catalog[sort['index']].sort(data.keys(),
+                                                    reverse=sort['reverse'])
+        except TypeError:
+            if sort['altindex'] in soup.catalog:
+                iids = soup.catalog[sort['altindex']].sort(data.keys(),
+                                                       reverse=sort['reverse'])
+            else:
+                # must not happen, but keep as safety belt
+                iids = data.keys()
+
         def lazyrecords():
-            for record_id in data:
-                yield LazyRecord(record_id, soup)
+            for iid in iids:
+                yield LazyRecord(iid, soup)
         return soup.storage.length.value, lazyrecords()
 
     def _query(self, soup):
@@ -70,7 +105,16 @@ class TableDataView(TableView):
         elif query is None and global_query is not None:
             query = global_query
         query.print_tree()
-        result = soup.lazy(query, with_size=True)
+        sort = self._extract_sort()
+        try:
+            result = soup.lazy(query, sort_index=sort['index'],
+                               reverse=sort['reverse'],
+                               with_size=True)
+        except TypeError:
+            result = soup.lazy(query, sort_index=sort['altindex'],
+                               reverse=sort['reverse'],
+                               with_size=True)
+
         length = result.next()
         return length, result
 
