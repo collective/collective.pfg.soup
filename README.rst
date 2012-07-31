@@ -1,7 +1,18 @@
 Soup Storage for PloneFormGen Form Data
 =======================================
 
-XXX WRITE ME
+This PloneFormGen Storage Adapter saves and index form-data in so called
+``soup``. A soup is an unstructured flat storage containing records with
+attributes (form-data). Attributes are indexed in an ``repoze.catalog``. Thus
+complex queries on the data are possible.
+
+It ships with an full-featured table view based on ``jquery.datatables``.
+Datatables server-side processing enables to have large datasets processed
+(searched over all columsn and by columns and sorted by column).
+
+XXX COMPLETE ME
+
+TODO: CSV Export, Re-Edit a row. Edit-History
 
 Installation
 ============
