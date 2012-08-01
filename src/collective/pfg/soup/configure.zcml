@@ -31,6 +31,11 @@
     <adapter factory=".indexadapters.TextIndexCreator" 
              for="Products.PloneFormGen.content.fields.FGTextField" />    
     <adapter factory=".indexadapters.KeywordIndexCreator" 
-             for="Products.PloneFormGen.content.fields.FGLinesField" />    
-
+             for="Products.PloneFormGen.content.fields.FGLinesField" />
+                 
+    <!-- register schema extender -->
+    <adapter for="Products.PloneFormGen.interfaces.IPloneFormGenField"
+             factory=".extender.PfgFieldSoupExtender"
+             provides="archetypes.schemaextender.interfaces.IOrderableSchemaExtender" />
+             
 </configure>

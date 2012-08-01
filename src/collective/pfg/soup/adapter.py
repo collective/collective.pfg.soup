@@ -4,7 +4,7 @@ from AccessControl import (
     ClassSecurityInfo,
     getSecurityManager,
 )
-from Products.Archetypes.public import Schema
+from Products.Archetypes import atapi
 from Products.ATContentTypes.content.base import registerATCT
 from Products.PloneFormGen.content.actionAdapter import (
     FormActionAdapter,
@@ -25,7 +25,37 @@ class SoupAdapter(FormActionAdapter):
     """A form action adapter storing form input data in a soup.
     """
 
-    schema = FormAdapterSchema.copy() + Schema((
+    schema = FormAdapterSchema.copy() + atapi.Schema((
+        atapi.BooleanField('show_created',
+            schemata='default',
+            default=False,
+            mode="w",
+            required=False,
+            widget=atapi.BooleanWidget(
+                label=u"Show Created Date and Time",
+                description=u"Shows date and time when the data was created.",
+            )
+        ),
+        atapi.BooleanField('show_last_modified',
+            schemata='default',
+            default=False,
+            mode="w",
+            required=False,
+            widget=atapi.BooleanWidget(
+                label=u"Show Last Modified Date and Time",
+                description=u"Shows date and time when the data was modifed.",
+            )
+        ),
+        atapi.BooleanField('show_userid',
+            schemata='default',
+            default=False,
+            mode="w",
+            required=False,
+            widget=atapi.BooleanWidget(
+                label=u"Show User Id",
+                description=u"Shows id of the user which created the data.",
+            )
+        ),
     ))
 
     meta_type = 'SoupAdapter'

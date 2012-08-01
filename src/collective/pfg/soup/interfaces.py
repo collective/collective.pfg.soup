@@ -1,6 +1,11 @@
 from zope.interface import Interface
 
 
+class IPfgSoupLayer(Interface):
+    """Browserlayer
+    """
+
+
 class IPfgSoupAdapter(Interface):
     """marker for a pfg soup adapter
     """

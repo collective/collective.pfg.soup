@@ -16,6 +16,8 @@ class TableView(BrowserView):
         pfg = aq_parent(self.context)
         result = []
         for field in pfg._getFieldObjects():
+            if not field.Schema()['pfgsoup_show'].get(field):
+                continue
             if field.isLabel():
                 continue
             result.append((field.fgField.widget.label,
