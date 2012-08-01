@@ -1,5 +1,9 @@
+from bda.calendar.base.timezone import tzawarenow
 from zope.interface import implementer
-from AccessControl import ClassSecurityInfo
+from AccessControl import (
+    ClassSecurityInfo,
+    getSecurityManager,
+)
 from Products.Archetypes.public import Schema
 from Products.ATContentTypes.content.base import registerATCT
 from Products.PloneFormGen.content.actionAdapter import (
@@ -42,6 +46,7 @@ class SoupAdapter(FormActionAdapter):
         """
         saves data.
         """
+        now = tzawarenow()
         soup = self.get_soup()
         data = OOBTNode()
         for field in fields:
@@ -55,6 +60,10 @@ class SoupAdapter(FormActionAdapter):
             if not isinstance(value, basestring):
                 value = str(value)
             data.attrs[field_name] = value
+        sm = getSecurityManager()
+        data.attrs['_auto_created'] = now
+        data.attrs['_auto_last_modified'] = now
+        data.attrs['_auto_last_userid'] = sm.getUser().getId()
         soup.add(data)
 
 registerATCT(SoupAdapter, PROJECTNAME)
