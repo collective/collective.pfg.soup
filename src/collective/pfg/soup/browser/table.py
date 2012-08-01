@@ -1,6 +1,6 @@
 import json
 from Acquisition import aq_parent
-from Products.Five import BcolumnserView
+from Products.Five import BrowserView
 from repoze.catalog.query import (
     Contains,
     Or,
@@ -8,7 +8,7 @@ from repoze.catalog.query import (
 from souper.soup import LazyRecord
 
 
-class TableView(BcolumnserView):
+class TableView(BrowserView):
     """datatables view
     """
 
