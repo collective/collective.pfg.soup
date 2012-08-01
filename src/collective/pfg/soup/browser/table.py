@@ -1,6 +1,6 @@
 import json
 from Acquisition import aq_parent
-from Products.Five import BrowserView
+from Products.Five import BcolumnserView
 from repoze.catalog.query import (
     Contains,
     Or,
@@ -8,11 +8,11 @@ from repoze.catalog.query import (
 from souper.soup import LazyRecord
 
 
-class TableView(BrowserView):
+class TableView(BcolumnserView):
     """datatables view
     """
 
-    def rows(self):
+    def columns(self):
         pfg = aq_parent(self.context)
         result = []
         for field in pfg._getFieldObjects():
@@ -32,23 +32,23 @@ class TableDataView(TableView):
 
     def _extract_sort(self):
         sortparams = dict()
-        rows = self.rows()
+        columns = self.columns()
         # sortingcols and sortable are not used for now, but to be complete
         # it gets extracted
         sortparams['sortingcols'] = self.request.form.get('iSortingCols')
         sortparams['sortable'] = dict()
         sortparams['reverse'] = False
         sortcols_idx = 0
-        sortparams['index'] = rows[sortcols_idx][1]
+        sortparams['index'] = columns[sortcols_idx][1]
         sortparams['altindex'] = '_sort_%s' % sortparams['index']
-        for idx in range(0, len(rows)):
+        for idx in range(0, len(columns)):
             col = int(self.request.form.get('iSortCol_%d' % idx, 0))
             if col:
                 sortcols_idx = idx
-                sortparams['index'] = rows[idx][1]
+                sortparams['index'] = columns[idx][1]
             sabl = self.request.form.get('bSortable_%d' % sortcols_idx,
                                          'false')
-            sortparams['sortable'][rows[idx][1]] = sabl == 'true'
+            sortparams['sortable'][columns[idx][1]] = sabl == 'true'
         sdir = self.request.form.get('sSortDir_%d' % sortcols_idx, 'asc')
         sortparams['reverse'] = sdir == 'desc'
         return sortparams
@@ -75,13 +75,13 @@ class TableDataView(TableView):
     def _query(self, soup):
         from pprint import pprint
         pprint(self.request.form)
-        rows = self.rows()
+        columns = self.columns()
         querymap = dict()
-        for idx in range(0, len(rows)):
+        for idx in range(0, len(columns)):
             term = self.request.form['sSearch_%d' % idx]
             if not term or not term.strip():
                 continue
-            querymap[rows[idx][1]] = term
+            querymap[columns[idx][1]] = term
         global_term = self.request.form['sSearch']
         if not querymap and not global_term:
             return self._alldata(soup)
@@ -135,12 +135,12 @@ class TableDataView(TableView):
         soup = self.context.get_soup()
         aaData = list()
         length, lazydata = self._query(soup)
-        rownames = [_[1] for _ in self.rows()]
+        colnames = [_[1] for _ in self.columns()]
 
         def record2list(record):
             result = list()
-            for rowname in rownames:
-                result.append(record.attrs.get(rowname, ''))
+            for colname in colnames:
+                result.append(record.attrs.get(colname, ''))
             return result
         for lazyrecord in self._slice(lazydata):
             aaData.append(record2list(lazyrecord()))
