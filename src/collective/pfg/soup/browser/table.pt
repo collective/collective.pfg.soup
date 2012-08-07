@@ -42,7 +42,11 @@
         </tfoot>
         
     </table>
-
+    <br />
+    <div>
+        <p><a href="#"
+              tal:attributes="href string:${context/absolute_url}/@@export">Export all data as CSV (excel optimized)</a></p>
+    </div>
   </tal:main-macro>
 </metal:main>
 

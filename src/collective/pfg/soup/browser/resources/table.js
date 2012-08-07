@@ -7,6 +7,7 @@ var PFGSOUP_asInitVals = new Array();
 			"bProcessing": true,
 			"bServerSide": true,
 			"sAjaxSource": url,
+			"sPaginationType": "full_numbers",
 			"oLanguage": {
 				"sSearch": "Alles durchsuchen:"
 			}		

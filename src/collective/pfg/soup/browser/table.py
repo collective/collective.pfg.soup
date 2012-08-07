@@ -13,11 +13,13 @@ class TableView(BrowserView):
     """datatables view
     """
 
+    enabled_field = 'pfgsoup_show'
+
     def columns(self):
         pfg = aq_parent(self.context)
         result = []
         for field in pfg._getFieldObjects():
-            if not field.Schema()['pfgsoup_show'].get(field):
+            if not field.Schema()[self.enabled_field].get(field):
                 continue
             if field.isLabel():
                 continue
