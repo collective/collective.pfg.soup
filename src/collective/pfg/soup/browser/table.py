@@ -9,6 +9,7 @@ from repoze.catalog.query import (
 from souper.soup import LazyRecord
 from ..config import AUTOFIELDS
 
+
 class TableView(BrowserView):
     """datatables view
     """
