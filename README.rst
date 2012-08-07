@@ -12,7 +12,12 @@ Datatables server-side processing enables to have large datasets processed
 
 XXX COMPLETE ME
 
-TODO: CSV Export, Re-Edit a row. Edit-History
+TODO: 
+
+- only index fields are searchable/ sortable
+- Re-Edit a row. 
+- Edit-History,
+
 
 Installation
 ============
