@@ -1,8 +1,8 @@
 import csv
 import datetime
 from StringIO import StringIO
-from Acquisition import aq_parent
 from .table import TableView
+
 
 class DialectExcelWithColons(csv.excel):
     delimiter = ';'
