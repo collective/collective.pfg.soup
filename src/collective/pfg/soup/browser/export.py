@@ -13,6 +13,7 @@ csv.register_dialect('excel-colon', DialectExcelWithColons)
 class CSVView(TableView):
 
     enabled_field = 'pfgsoup_export'
+    enabled_auto_prefix = 'export'
 
     def __call__(self):
         """csv with soupdata.

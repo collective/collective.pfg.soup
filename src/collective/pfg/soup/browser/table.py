@@ -14,6 +14,7 @@ class TableView(BrowserView):
     """
 
     enabled_field = 'pfgsoup_show'
+    enabled_auto_prefix = 'show'
 
     def columns(self):
         pfg = aq_parent(self.context)
@@ -27,7 +28,7 @@ class TableView(BrowserView):
                            field.fgField.getName(),
                            ))
         for autofield in AUTOFIELDS:
-            atfieldid = 'show_%s' % autofield
+            atfieldid = '%s_%s' % (self.enabled_auto_prefix, autofield)
             if self.context.Schema()[atfieldid].get(self.context):
                 attrid = '_auto_%s' % autofield
                 label = autofield.replace('_', ' ').title()
@@ -113,7 +114,6 @@ class TableDataView(TableView):
             query = Or(query, global_query)
         elif query is None and global_query is not None:
             query = global_query
-        query.print_tree()
         sort = self._extract_sort()
         try:
             result = soup.lazy(query, sort_index=sort['index'],

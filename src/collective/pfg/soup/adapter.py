@@ -34,6 +34,16 @@ for aid in AUTOFIELDS:
                 description=u"Show data column in table or not?",
             )
     ),)
+    atautofields.append(atapi.BooleanField('export_%s' % aid,
+            schemata='default',
+            default=False,
+            mode="w",
+            required=False,
+            widget=atapi.BooleanWidget(
+                label=u"Export %s" % aid.replace('_', ' ').title(),
+                description=u"Export data column in CSV-file or not?",
+            )
+    ),)
 
 
 @implementer(IPfgSoupAdapter)
