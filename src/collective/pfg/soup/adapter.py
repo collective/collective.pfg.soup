@@ -15,9 +15,25 @@ from souper.soup import get_soup
 from collective.pfg.soup import _
 from collective.pfg.soup.config import PROJECTNAME
 from .interfaces import IPfgSoupAdapter
+from .config import (
+    AUTOFIELDS,
+)
 
 import logging
 logger = logging.getLogger("PloneFormGen")
+
+atautofields = list()
+for aid in AUTOFIELDS:
+    atautofields.append(atapi.BooleanField('show_%s' % aid,
+            schemata='default',
+            default=False,
+            mode="w",
+            required=False,
+            widget=atapi.BooleanWidget(
+                label=u"Show %s" % aid.replace('_', ' ').title(),
+                description=u"Show data column in table or not?",
+            )
+    ),)
 
 
 @implementer(IPfgSoupAdapter)
@@ -25,38 +41,7 @@ class SoupAdapter(FormActionAdapter):
     """A form action adapter storing form input data in a soup.
     """
 
-    schema = FormAdapterSchema.copy() + atapi.Schema((
-        atapi.BooleanField('show_created',
-            schemata='default',
-            default=False,
-            mode="w",
-            required=False,
-            widget=atapi.BooleanWidget(
-                label=u"Show Created Date and Time",
-                description=u"Shows date and time when the data was created.",
-            )
-        ),
-        atapi.BooleanField('show_last_modified',
-            schemata='default',
-            default=False,
-            mode="w",
-            required=False,
-            widget=atapi.BooleanWidget(
-                label=u"Show Last Modified Date and Time",
-                description=u"Shows date and time when the data was modifed.",
-            )
-        ),
-        atapi.BooleanField('show_userid',
-            schemata='default',
-            default=False,
-            mode="w",
-            required=False,
-            widget=atapi.BooleanWidget(
-                label=u"Show User Id",
-                description=u"Shows id of the user which created the data.",
-            )
-        ),
-    ))
+    schema = FormAdapterSchema.copy() + atapi.Schema(atautofields)
 
     meta_type = 'SoupAdapter'
 
@@ -93,7 +78,7 @@ class SoupAdapter(FormActionAdapter):
         sm = getSecurityManager()
         data.attrs['_auto_created'] = now
         data.attrs['_auto_last_modified'] = now
-        data.attrs['_auto_last_userid'] = sm.getUser().getId()
+        data.attrs['_auto_userid'] = sm.getUser().getId()
         soup.add(data)
 
 registerATCT(SoupAdapter, PROJECTNAME)

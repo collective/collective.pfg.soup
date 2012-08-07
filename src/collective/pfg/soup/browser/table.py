@@ -1,4 +1,5 @@
 import json
+import datetime
 from Acquisition import aq_parent
 from Products.Five import BrowserView
 from repoze.catalog.query import (
@@ -6,7 +7,7 @@ from repoze.catalog.query import (
     Or,
 )
 from souper.soup import LazyRecord
-
+from ..config import AUTOFIELDS
 
 class TableView(BrowserView):
     """datatables view
@@ -23,6 +24,12 @@ class TableView(BrowserView):
             result.append((field.fgField.widget.label,
                            field.fgField.getName(),
                            ))
+        for autofield in AUTOFIELDS:
+            atfieldid = 'show_%s' % autofield
+            if self.context.Schema()[atfieldid].get(self.context):
+                attrid = '_auto_%s' % autofield
+                label = autofield.replace('_', ' ').title()
+                result.append((label, attrid))
         return result
 
 
@@ -73,8 +80,6 @@ class TableDataView(TableView):
         return soup.storage.length.value, lazyrecords()
 
     def _query(self, soup):
-        from pprint import pprint
-        pprint(self.request.form)
         columns = self.columns()
         querymap = dict()
         for idx in range(0, len(columns)):
@@ -140,7 +145,10 @@ class TableDataView(TableView):
         def record2list(record):
             result = list()
             for colname in colnames:
-                result.append(record.attrs.get(colname, ''))
+                value = record.attrs.get(colname, '')
+                if isinstance(value, datetime.datetime):
+                    value = value.isoformat()
+                result.append(value)
             return result
         for lazyrecord in self._slice(lazydata):
             aaData.append(record2list(lazyrecord()))

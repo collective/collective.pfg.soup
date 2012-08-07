@@ -25,6 +25,13 @@
 
   <browser:page
     for="..interfaces.IPfgSoupAdapter"
+    name="export"
+    class=".export.CSVView"
+    permission="cmf.ModifyPortalContent"
+  />   
+
+  <browser:page
+    for="..interfaces.IPfgSoupAdapter"
     name="rebuild_catalog"
     class=".utils.UtilsView"
     attribute="rebuild"

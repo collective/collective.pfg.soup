@@ -24,7 +24,7 @@ class PfgCatalogFactory(object):
             if pfgindexadder is None:
                 continue
             pfgindexadder(catalog)
-        for field_id in auto_field_ids:
+        for field_id in auto_field_ids():
             indexer = NodeAttributeIndexer(field_id)
             catalog[field_id] = CatalogFieldIndex(indexer)
         return catalog
