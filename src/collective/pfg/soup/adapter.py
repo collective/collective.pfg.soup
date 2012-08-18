@@ -80,7 +80,7 @@ class SoupAdapter(FormActionAdapter):
             field_name = field.getFieldFormName()
             if field.isFileField():
                 file_value = REQUEST.form.get('%s_file' % field_name)
-                raise NotImplementedError('Not Yet Done')
+                raise NotImplementedError('FileField Not Yet Done')
             value = REQUEST.form.get(field_name, '')
             if not isinstance(value, basestring):
                 value = str(value)
