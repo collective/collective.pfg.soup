@@ -8,6 +8,19 @@ var PFGSOUP_asInitVals = new Array();
 			"bServerSide": true,
 			"sAjaxSource": url,
 			"sPaginationType": "full_numbers",
+			'fnDrawCallback' : function(oSettings) {
+				$("#pfgsoupdata tbody a.pfgsoup-edit").click(function() {
+					var iid = $(this).attr('data-iid');
+					$.ajax({
+						  url: '@@fetch-edit-data',
+						  dataType: 'json',
+						  data: {'iid': iid},
+						  success: function (data) {
+							  alert(data);
+						  }
+					});
+			    });				
+			},
 			"oLanguage": {
 				"sSearch": "Alles durchsuchen:"
 			}		
@@ -34,6 +47,5 @@ var PFGSOUP_asInitVals = new Array();
 				this.value = PFGSOUP_asInitVals[$("#pfgsoupdata tfoot input").index(this)];
 			}
 		} );		
-		
 	});
 })(jQuery);

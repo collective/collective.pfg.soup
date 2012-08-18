@@ -144,9 +144,10 @@ class TableDataView(TableView):
         aaData = list()
         length, lazydata = self._query(soup)
         colnames = [_[1] for _ in self.columns()]
+        edithtml = '<a href="#" data-iid="%s" class="pfgsoup-edit">edit</a>'
 
         def record2list(record):
-            result = list()
+            result = [edithtml % record.intid]
             for colname in colnames:
                 value = record.attrs.get(colname, '')
                 if isinstance(value, datetime.datetime):

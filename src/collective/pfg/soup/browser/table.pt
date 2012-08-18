@@ -17,6 +17,7 @@
            tal:attributes="data-ajaxurl python:context.absolute_url()+'/@@pfgsoupdata'">
         <thead>
            <tr>
+             <th><!-- Actions --></th>
              <tal:loop repeat="colinfo view/columns">
                <th tal:attributes="class python:'datarow-'+colinfo[1];">
                    <span tal:replace="python:colinfo[0]">Title</span>
@@ -25,12 +26,13 @@
            </tr>
         </thead>
         <tbody>
-            <tr>
+            <tr>              
               <td tal:attributes="columnspan: python:len(view.columns())">Bitte warte. Lade Daten...</td>
             </tr>  
         </tbody>
         <tfoot>
            <tr>
+             <th><!-- Actions --></th>
              <tal:loop repeat="colinfo view/columns">
                <th>
                    <input type="text" class="search_init" value="Search engines" name="search_engine"                          
