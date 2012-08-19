@@ -24,7 +24,22 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 		set_cookie: function (c_name, value) {
 			var c_value = escape(value) + "; path=/;";
 			document.cookie = c_name + "=" + c_value;
+		},
+		get_cookie: function(c_name) {
+			var i, x, y, ARRcookies = document.cookie.split(";");
+			for (i=0; i<ARRcookies.length; i++) {
+				x = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+				y = ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+				x = x.replace(/^\s+|\s+$/g,"");
+				if (x==c_name) {
+		            return unescape(y);
+		        }
+		    }
+		},
+		del_cookie: function (c_name)	{
+		    document.cookie = c_name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 		}
+
 	});
 
 	$(document).ready(function() {
@@ -72,6 +87,18 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 				this.className = "search_init";
 				this.value = PFGSOUP.asInitVals[$("#pfgsoupdata tfoot input").index(this)];
 			}
-		} );		
+		} );	
+		$("div.pfg-form form.fgBaseEditForm").before(function() {
+			var iid = PFGSOUP.get_cookie('PFGSOUP_EDIT');
+			if (iid=="undefined") {
+				return ''
+			}
+			var message = '<dl class="portalMessage info"><dt>Info</dt><dd>';
+			message = message + "Form in Edit-Mode (ID "+iid+").";
+			message = message + "</dd></dl>";
+			message = $(message);
+			return message;
+		} );
+		
 	});
 })(jQuery);
