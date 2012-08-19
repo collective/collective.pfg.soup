@@ -14,7 +14,9 @@
     <h1 class="documentFirstHeading">Form Data Manager</h1>
     
     <table id="pfgsoupdata"
-           tal:attributes="data-ajaxurl python:context.absolute_url()+'/@@pfgsoupdata'">
+           tal:attributes="data-ajaxurl python:context.absolute_url()+'/@@pfgsoupdata';
+                           data-editurl python:context.absolute_url()+'/@@pfgeditdata';
+                           data-formurl python:context.aq_parent.absolute_url();">
         <thead>
            <tr>
              <th><!-- Actions --></th>

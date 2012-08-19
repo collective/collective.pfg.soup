@@ -37,6 +37,13 @@
     attribute="rebuild"
     permission="cmf.ManagePortal"
   />   
+  
+  <browser:page
+    for="..interfaces.IPfgSoupAdapter"
+    name="pfgeditdata"
+    class=".edit.EditData"
+    permission="cmf.ModifyPortalContent"
+  />   
 
   <browser:page
     for="Products.PloneFormGen.interfaces.IPloneFormGenForm"
