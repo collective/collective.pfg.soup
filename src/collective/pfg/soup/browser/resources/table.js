@@ -1,31 +1,32 @@
 if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 
-$.extend(PFGSOUP, {
-	asInitVals: new Array(),
-	post: function(data, textStatus, jqXHR) {
-		alert(data);
-		var form = $('<form></form>');
-		var path = $('#pfgsoupdata').attr('data-formurl');
-
-	    form.attr("method", "post");
-	    form.attr("action", path);
-
-	    $.each(data, function(key, value) {
-	        var field = $('<input type="hidden"></input>');
-	        field.attr("name", key);
-	        field.attr("value", value);
-
-	        form.append(field);
-	    });
-
-	    // The form needs to be apart of the document in
-	    // order for us to be able to submit it.
-	    $(document.body).append(form);
-	    form.submit();
-	}
-});
-
 (function($) {
+
+	$.extend(PFGSOUP, {
+		asInitVals: new Array(),
+		post: function(data, textStatus, jqXHR) {
+			var form = $('<form></form>');
+			var path = $('#pfgsoupdata').attr('data-formurl');
+	
+		    form.attr("method", "post");
+		    form.attr("action", path);
+	
+		    $.each(data, function(key, value) {
+		        var field = $('<input type="hidden"></input>');
+		        field.attr("name", key);
+		        field.attr("value", value);
+	
+		        form.append(field);
+		    });
+		    $(document.body).append(form);
+		    form.submit();
+		},
+		set_cookie: function (c_name, value) {
+			var c_value = escape(value) + "; path=/;";
+			document.cookie = c_name + "=" + c_value;
+		}
+	});
+
 	$(document).ready(function() {
 		var url = $('#pfgsoupdata').attr('data-ajaxurl');
 		var oTable = $('#pfgsoupdata').dataTable( {
@@ -37,6 +38,7 @@ $.extend(PFGSOUP, {
 				$("#pfgsoupdata tbody a.pfgsoup-edit").click(function() {
 					var iid = $(this).attr('data-iid');
 					var url = $('#pfgsoupdata').attr('data-editurl');
+					PFGSOUP.set_cookie('PFGSOUP_EDIT', iid, 1);
 					$.ajax({
 						  url: url,
 						  dataType: 'json',
