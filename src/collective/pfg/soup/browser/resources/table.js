@@ -90,7 +90,7 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 		} );	
 		$("div.pfg-form form.fgBaseEditForm").before(function() {
 			var iid = PFGSOUP.get_cookie('PFGSOUP_EDIT');
-			if (iid=="undefined") {
+			if (iid==undefined) {
 				return ''
 			}
 			var message = '<dl class="portalMessage info"><dt>Info</dt><dd>';

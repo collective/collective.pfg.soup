@@ -1,4 +1,5 @@
 from bda.calendar.base.timezone import tzawarenow
+from persistent.list import PersistentList
 from zope.interface import implementer
 from AccessControl import (
     ClassSecurityInfo,
@@ -73,7 +74,13 @@ class SoupAdapter(FormActionAdapter):
         """
         now = tzawarenow()
         soup = self.get_soup()
-        data = OOBTNode()
+        modified_fields = list()
+        iid = self.REQUEST.cookies.get('PFGSOUP_EDIT', None)
+        if iid:
+            iid = int(iid)
+            data = soup.get(iid)
+        else:
+            data = OOBTNode()
         for field in fields:
             if field.isLabel():
                 continue
@@ -84,11 +91,29 @@ class SoupAdapter(FormActionAdapter):
             value = REQUEST.form.get(field_name, '')
             if not isinstance(value, basestring):
                 value = str(value)
+            if iid:
+                if data.attrs[field_name] == value:
+                    continue
+                modified_fields.append(field_name)
             data.attrs[field_name] = value
         sm = getSecurityManager()
+        if iid:
+            if modified_fields:
+                data.attrs['_auto_last_modified'] = now
+                log = {}
+                log['user'] = sm.getUser().getId()
+                log['date'] = now
+                log['fields'] = modified_fields
+                if '_auto_log' not in data.attrs:
+                    data.attrs['_auto_log'] = PersistentList()
+                data.attrs['_auto_log'].append(log)
+            self.REQUEST.response.expireCookie('PFGSOUP_EDIT', path='/')
+            # XXX redirect to tablea
+            return
         data.attrs['_auto_created'] = now
         data.attrs['_auto_last_modified'] = now
         data.attrs['_auto_userid'] = sm.getUser().getId()
+        data.attrs['_auto_log'] = PersistentList()
         soup.add(data)
 
 registerATCT(SoupAdapter, PROJECTNAME)

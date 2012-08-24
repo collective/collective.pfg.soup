@@ -8,7 +8,7 @@ class EditData(BrowserView):
     def __call__(self):
         soup = self.context.get_soup()
         iid = int(self.request.get('iid'))
-        record = soup.storage.data[iid]
+        record = soup.get(iid)
         data = {}
         for name in record.attrs:
             if name.startswith('_auto_'):
