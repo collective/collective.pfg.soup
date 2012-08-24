@@ -37,7 +37,7 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 		    }
 		},
 		del_cookie: function (c_name)	{
-		    document.cookie = c_name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+		    document.cookie = c_name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/;';
 		}
 
 	});
@@ -53,7 +53,7 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 				$("#pfgsoupdata tbody a.pfgsoup-edit").click(function() {
 					var iid = $(this).attr('data-iid');
 					var url = $('#pfgsoupdata').attr('data-editurl');
-					PFGSOUP.set_cookie('PFGSOUP_EDIT', iid, 1);
+					PFGSOUP.set_cookie('PFGSOUP_EDIT', iid);
 					$.ajax({
 						  url: url,
 						  dataType: 'json',
@@ -87,7 +87,9 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 				this.className = "search_init";
 				this.value = PFGSOUP.asInitVals[$("#pfgsoupdata tfoot input").index(this)];
 			}
-		} );	
+		} );
+		
+		// below here: SOUP EDIT
 		$("div.pfg-form form.fgBaseEditForm").before(function() {
 			var iid = PFGSOUP.get_cookie('PFGSOUP_EDIT');
 			if (iid==undefined) {
@@ -99,6 +101,11 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 			message = $(message);
 			return message;
 		} );
-		
+		$(window).unload(function(){
+			if ($('table.pfgsoupdata').length != 0 || $('div.pfg-form form.fgBaseEditForm').length != 0)  {
+				return;
+			}
+			PFGSOUP.del_cookie('PFGSOUP_EDIT');
+		});
 	});
 })(jQuery);
