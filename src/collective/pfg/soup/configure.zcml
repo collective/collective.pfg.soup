@@ -13,8 +13,16 @@
     <five:registerPackage package="." initialize=".initialize" />
     
     <subscriber for=".interfaces.IPfgSoupAdapter
-                   Products.Archetypes.interfaces.IObjectInitializedEvent"
-              handler=".subscribers.create_catalogfactory"
+                     Products.Archetypes.interfaces.IObjectInitializedEvent"
+                handler=".subscribers.create_catalogfactory"
+    />
+    <subscriber for="Products.PloneFormGen.interfaces.IPloneFormGenField
+                     zope.lifecyclevent.interfaces.IObjectRemovedEvent"
+                handler=".subscribers.rebuild_catalog"
+    />
+    <subscriber for="Products.PloneFormGen.interfaces.IPloneFormGenField
+                     Products.Archetypes.interfaces.IObjectInitializedEvent"
+                handler=".subscribers.rebuild_catalog"
     />
     
     <genericsetup:registerProfile
