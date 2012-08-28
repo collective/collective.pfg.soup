@@ -90,7 +90,7 @@ class SoupAdapter(FormActionAdapter):
                 raise NotImplementedError('FileField Not Yet Done')
             value = REQUEST.form.get(field_name, '')
             if iid:
-                if data.attrs[field_name] == value:
+                if data.attrs.get(field_name, None) == value:
                     continue
                 modified_fields.append(field_name)
             data.attrs[field_name] = value
