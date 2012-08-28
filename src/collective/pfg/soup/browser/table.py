@@ -195,8 +195,6 @@ class TableDataView(TableView):
             sortindex = all_columns[sort['index']]['sortindex']
         else:
             sortindex = None
-        query.print_tree()
-        print "sort_on ", sortindex
         try:
             result = soup.lazy(query, sort_index=sortindex,
                                reverse=sort['reverse'],
@@ -205,7 +203,6 @@ class TableDataView(TableView):
             return length, result
         except Exception, e:
             # ParseError raised by zope.index.text.*. this sucks
-            print e
             return self._alldata(soup)
 
     def _slice(self, fullresult):
