@@ -34,9 +34,6 @@ setup(name='collective.pfg.soup',
             'Products.PloneFormGen',
             'collective.js.datatables',
             'souper.plone',
-            'yafowil.plone',
-            'yafowil.yaml',
-            'yafowil.widget.array',
       ],
       entry_points="""
       [z3c.autoinclude.plugin]

@@ -14,34 +14,38 @@
     <h1 class="documentFirstHeading">Form Data Manager</h1>
     
     <table id="pfgsoupdata"
+           tal:define="columns view/columns"
            tal:attributes="data-ajaxurl python:context.absolute_url()+'/@@pfgsoupdata';
                            data-editurl python:context.absolute_url()+'/@@pfgeditdata';
                            data-formurl python:context.aq_parent.absolute_url();">
         <thead>
            <tr>
-             <th><!-- Actions --></th>
-             <tal:loop repeat="colinfo view/columns">
-               <th tal:attributes="class python:'datarow-'+colinfo[1];">
-                   <span tal:replace="python:colinfo[0]">Title</span>
+             <tal:loop repeat="colname columns">
+               <th tal:attributes="class python:'datarow-'+colname;">
+                   <span tal:replace="python:columns[colname]['label']">Title</span>
                </th>
              </tal:loop>
+             <th><!-- Actions --></th>
            </tr>
         </thead>
         <tbody>
             <tr>              
-              <td tal:attributes="columnspan: python:len(view.columns())">Bitte warte. Lade Daten...</td>
+              <td tal:attributes="columnspan: python:len(columns)">Bitte warte. Lade Daten...</td>
             </tr>  
         </tbody>
         <tfoot>
            <tr>
-             <th><!-- Actions --></th>
-             <tal:loop repeat="colinfo view/columns">
+             <tal:loop repeat="colname columns">
                <th>
-                   <input type="text" class="search_init" value="Search engines" name="search_engine"                          
-                          tal:attributes="value python:'Suche in '+ colinfo[0];
-                                          name python:colinfo[0];" >
+                   <input type="text" class="search_init" 
+                          value="Search engines" 
+                          name="search_engine"                          
+                          tal:attributes="value python:'Suche in '+ columns[colname]['label'];
+                                          name python:colname;"
+                          tal:condition="python:columns[colname]['searchable']">
                </th>
              </tal:loop>
+             <th><!-- Actions --></th>
            </tr>
         </tfoot>
         

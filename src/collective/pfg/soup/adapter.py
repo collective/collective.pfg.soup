@@ -89,8 +89,6 @@ class SoupAdapter(FormActionAdapter):
                 file_value = REQUEST.form.get('%s_file' % field_name)
                 raise NotImplementedError('FileField Not Yet Done')
             value = REQUEST.form.get(field_name, '')
-            if not isinstance(value, basestring):
-                value = str(value)
             if iid:
                 if data.attrs[field_name] == value:
                     continue
@@ -108,7 +106,8 @@ class SoupAdapter(FormActionAdapter):
                     data.attrs['_auto_log'] = PersistentList()
                 data.attrs['_auto_log'].append(log)
             self.REQUEST.response.expireCookie('PFGSOUP_EDIT', path='/')
-            # XXX redirect to tablea
+            # XXX redirect to table
+            # self.REQUEST.response.redirect(...)
             return
         data.attrs['_auto_created'] = now
         data.attrs['_auto_last_modified'] = now

@@ -10,7 +10,6 @@ from .interfaces import IAddPfgIndex
 from .adapter import SoupAdapter
 
 
-
 @implementer(ICatalogFactory)
 class PfgCatalogFactory(object):
 

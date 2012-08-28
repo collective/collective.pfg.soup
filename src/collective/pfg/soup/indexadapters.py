@@ -49,3 +49,6 @@ class KeywordIndexCreator(BaseIndexCreator):
 
     def create(self, indexer):
         return CatalogKeywordIndex(indexer)
+
+    def create_sort(self, indexer):
+        return CatalogFieldIndex(indexer)

@@ -1,10 +1,14 @@
 import json
 import datetime
+from odict import odict
 from Acquisition import aq_parent
 from Products.Five import BrowserView
+from plone.memoize.view import memoize
 from repoze.catalog.query import (
     Contains,
     Or,
+    Any,
+    Eq,
 )
 from souper.soup import LazyRecord
 from ..config import AUTOFIELDS
@@ -17,23 +21,47 @@ class TableView(BrowserView):
     enabled_field = 'pfgsoup_show'
     enabled_auto_prefix = 'show'
 
+    @memoize
     def columns(self):
         pfg = aq_parent(self.context)
-        result = []
+        soup = self.context.get_soup()
+        catalog = soup.catalog
+        result = odict()
         for field in pfg._getFieldObjects():
             if not field.Schema()[self.enabled_field].get(field):
                 continue
             if field.isLabel():
                 continue
-            result.append((field.fgField.widget.label,
-                           field.fgField.getName(),
-                           ))
+            name = field.fgField.getName()
+            col_info = {}
+            col_info['label'] = field.fgField.widget.label
+            col_info['sortable'] = False
+            col_info['searchable'] = False
+            col_info['sortindex'] = None
+            if ('_sort_%s' % name) in catalog:
+                col_info['sortable'] = hasattr(catalog['_sort_%s' % name],
+                                               'sort')
+                col_info['sortindex'] = '_sort_%s' % name
+            if name in catalog:
+                index = catalog[name]
+                if not col_info['sortable']:
+                    col_info['sortable'] = hasattr(index, 'sort')
+                    if col_info['sortable']:
+                        col_info['sortindex'] = name
+                opattrs = ['applyContains', 'applyAny', 'applyEq']
+                opavail = [_ for _ in opattrs if hasattr(index, _)]
+                col_info['searchable'] = bool(opavail)
+            result[name] = col_info
         for autofield in AUTOFIELDS:
             atfieldid = '%s_%s' % (self.enabled_auto_prefix, autofield)
             if self.context.Schema()[atfieldid].get(self.context):
-                attrid = '_auto_%s' % autofield
-                label = autofield.replace('_', ' ').title()
-                result.append((label, attrid))
+                name = '_auto_%s' % autofield
+                col_info = {}
+                col_info['label'] = autofield.replace('_', ' ').title()
+                col_info['sortable'] = True
+                col_info['sortindex'] = name
+                col_info['searchable'] = autofield == 'userid'
+                result[name] = col_info
         return result
 
 
@@ -44,69 +72,116 @@ class TableDataView(TableView):
     def _extract_sort(self):
         sortparams = dict()
         columns = self.columns()
-        # sortingcols and sortable are not used for now, but to be complete
-        # it gets extracted
+        # sortingcols, sortable, searchable are not used for now, but to be 
+        # complete it gets extracted
         sortparams['sortingcols'] = self.request.form.get('iSortingCols')
+        try:
+            sortparams['sortingcols'] = int(sortparams['sortingcols'])
+        except:
+            sortparams['sortingcols'] = None
         sortparams['sortable'] = dict()
+        sortparams['searchable'] = dict()
         sortparams['reverse'] = False
-        sortcols_idx = 0
-        sortparams['index'] = columns[sortcols_idx][1]
-        sortparams['altindex'] = '_sort_%s' % sortparams['index']
+        sortparams['index'] = None
         for idx in range(0, len(columns)):
-            col = int(self.request.form.get('iSortCol_%d' % idx, 0))
-            if col:
-                sortcols_idx = idx
-                sortparams['index'] = columns[idx][1]
-            sabl = self.request.form.get('bSortable_%d' % sortcols_idx,
+            colname = columns.keys()[idx]
+            soabl = self.request.form.get('bSortable_%d' % idx,
                                          'false')
-            sortparams['sortable'][columns[idx][1]] = sabl == 'true'
-        sdir = self.request.form.get('sSortDir_%d' % sortcols_idx, 'asc')
-        sortparams['reverse'] = sdir == 'desc'
+            sortparams['sortable'][colname] = soabl == 'true'
+            seabl = self.request.form.get('bSearchable_%d' % idx,
+                                         'false')
+            sortparams['searchable'][colname] = seabl == 'true'
+            col = int(self.request.form.get('iSortCol_%d' % idx, -1))
+            if col > -1:
+                sortparams['index'] = columns.keys()[col]
+            sdir = self.request.form.get('sSortDir_%d' % idx, None)
+            if sdir is not None:
+                sortparams['reverse'] = sdir == 'desc'
         return sortparams
 
+
     def _alldata(self, soup):
-        data = soup.storage.data
+        columns = self.columns()
+        iids = soup.storage.data.keys()
         sort = self._extract_sort()
-        try:
-            iids = soup.catalog[sort['index']].sort(data.keys(),
-                                                    reverse=sort['reverse'])
-        except TypeError:
-            if sort['altindex'] in soup.catalog:
-                iids = soup.catalog[sort['altindex']].sort(data.keys(),
-                                                       reverse=sort['reverse'])
-            else:
-                # must not happen, but keep as safety belt
-                iids = data.keys()
+        if sort['index'] and columns[sort['index']]['sortable']:
+            sortindex = soup.catalog[columns[sort['index']]['sortindex']]
+            try:
+                iids = sortindex.sort(soup.storage.data.keys(),
+                                      reverse=sort['reverse'])
+            except TypeError:
+                # sucking textindex raise this
+                iids = soup.storage.data.keys()
 
         def lazyrecords():
             for iid in iids:
                 yield LazyRecord(iid, soup)
         return soup.storage.length.value, lazyrecords()
 
+    @memoize
+    def _select_index_op(self, index, value):
+        # this is crap, bit no idea how to make it more efficient
+        try:
+            index.applyContains(value)
+        except NotImplementedError, e:
+            try:
+                index.applyEq(value)
+            except NotImplementedError, e:
+                return None
+            else:
+                return Eq
+        except Exception, e:
+            return None
+        else:
+            return Contains
+
     def _query(self, soup):
-        columns = self.columns()
+        all_columns = self.columns()
+        columns = odict()
+        for name in all_columns:
+            if all_columns[name]['searchable']:
+                columns[name] = all_columns[name]
         querymap = dict()
-        for idx in range(0, len(columns)):
+        for idx in range(0, len(columns.keys())):
+            name = columns.keys()[idx]
             term = self.request.form['sSearch_%d' % idx]
-            if not term or not term.strip():
+            if not term or not term.strip() \
+               or not soup.catalog.get(name, False):
                 continue
-            querymap[columns[idx][1]] = term
+            querymap[name] = term
         global_term = self.request.form['sSearch']
         if not querymap and not global_term:
             return self._alldata(soup)
         query = None
         if querymap:
             for index_name in querymap:
-                query_element = Contains(index_name, querymap[index_name])
+                query_element = None
+                searchvalue = querymap[index_name]
+                op = self._select_index_op(soup.catalog[index_name],
+                                           searchvalue)
+                if op is None:
+                    continue
+                if op is Contains and not searchvalue.endswith('*'):
+                    searchvalue += '*'
+                query_element = op(index_name, searchvalue)
                 if query is not None:
                     query &= query_element
                 else:
                     query = query_element
-
         global_query = None
         if global_term:
-            for index_name in soup.catalog:
-                query_element = Contains(index_name, global_term)
+            for index_name in columns:
+                if index_name.startswith('_sort_'):
+                    continue
+                query_element = None
+                op = self._select_index_op(soup.catalog[index_name],
+                                           global_term)
+                if op is None:
+                    continue
+                searchvalue = global_term
+                if op is Contains and not searchvalue.endswith('*'):
+                    searchvalue += '*'
+                query_element = op(index_name, searchvalue)
                 if global_query is not None:
                     global_query = Or(global_query, query_element)
                 else:
@@ -116,17 +191,22 @@ class TableDataView(TableView):
         elif query is None and global_query is not None:
             query = global_query
         sort = self._extract_sort()
+        if sort['index'] and all_columns[sort['index']]['sortable']:
+            sortindex = all_columns[sort['index']]['sortindex']
+        else:
+            sortindex = None
+        query.print_tree()
+        print "sort_on ", sortindex
         try:
-            result = soup.lazy(query, sort_index=sort['index'],
+            result = soup.lazy(query, sort_index=sortindex,
                                reverse=sort['reverse'],
                                with_size=True)
-        except TypeError:
-            result = soup.lazy(query, sort_index=sort['altindex'],
-                               reverse=sort['reverse'],
-                               with_size=True)
-
-        length = result.next()
-        return length, result
+            length = result.next()
+            return length, result
+        except Exception, e:
+            # ParseError raised by zope.index.text.*. this sucks
+            print e
+            return self._alldata(soup)
 
     def _slice(self, fullresult):
         start = int(self.request.form['iDisplayStart'])
@@ -141,18 +221,21 @@ class TableDataView(TableView):
 
     def __call__(self):
         soup = self.context.get_soup()
+        columns = self.columns()
         aaData = list()
         length, lazydata = self._query(soup)
-        colnames = [_[1] for _ in self.columns()]
         edithtml = '<a href="#" data-iid="%s" class="pfgsoup-edit">edit</a>'
 
         def record2list(record):
-            result = [edithtml % record.intid]
-            for colname in colnames:
+            result = list()
+            for colname in columns:
                 value = record.attrs.get(colname, '')
+                if isinstance(value, list):
+                    value = ', '.join(value)
                 if isinstance(value, datetime.datetime):
                     value = value.isoformat()
                 result.append(value)
+            result.append(edithtml % record.intid)
             return result
         for lazyrecord in self._slice(lazydata):
             aaData.append(record2list(lazyrecord()))

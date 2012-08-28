@@ -19,16 +19,21 @@ class CSVView(TableView):
         """csv with soupdata.
         """
         now = datetime.datetime.now()
+        columns = self.columns()
         soup = self.context.get_soup()
         sio = StringIO()
         ex = csv.writer(sio, dialect='excel-colon')
-        labels = [_[0] for _ in self.columns()]
-        attrs = [_[1] for _ in self.columns()]
+        labels = [columns[_]['label'] for _ in columns]
         ex.writerow(labels)
         iids = soup.catalog['_auto_created'].sort(soup.storage.data.keys())
         for iid in iids:
             record = soup.storage.data[iid]
-            values = [record.attrs.get(_, '') for _ in attrs]
+            values = []
+            for name in columns.keys():
+                value = record.attrs.get(name, '')
+                if isinstance(value, list):
+                    value = ', '.join(value)
+                values.append(value)
             ex.writerow(values)
         filename = now.strftime('%Y-%m-%D_%H-%M-%S.csv')
         filename = '%s_%s' % (self.context.getId(), filename)

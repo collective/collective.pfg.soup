@@ -13,3 +13,4 @@ parts/
 src/*.egg-info
 .tmp*
 var/
+old-eggs/

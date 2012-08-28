@@ -49,7 +49,16 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 			"bServerSide": true,
 			"sAjaxSource": url,
 			"sPaginationType": "full_numbers",
-			'fnDrawCallback' : function(oSettings) {
+			"bStateSave": true,
+			"aaSorting": [],
+			"aoColumnDefs": [
+			     {"aTargets": [-1], 
+			      "bSortable": false, 
+			      "bSearchable": false,
+			      "sWidth": "3em"
+			     }
+			],
+			"fnDrawCallback" : function(oSettings) {
 				$("#pfgsoupdata tbody a.pfgsoup-edit").click(function() {
 					var iid = $(this).attr('data-iid');
 					var url = $('#pfgsoupdata').attr('data-editurl');
@@ -63,8 +72,8 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 			    });
 			},
 			"oLanguage": {
-				"sSearch": "Alles durchsuchen:"
-			}		
+		          "sUrl": "@@collective.js.datatables.translation"
+		      }			
 		});
 		$("#pfgsoupdata tfoot input").keyup( function () {
 			/* Filter on the column (the index) of this element */
@@ -102,7 +111,7 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 			return message;
 		} );
 		$(window).unload(function(){
-			if ($('table.pfgsoupdata').length != 0 || $('div.pfg-form form.fgBaseEditForm').length != 0)  {
+			if ($('table#pfgsoupdata').length != 0 || $('div.pfg-form form.fgBaseEditForm').length != 0)  {
 				return;
 			}
 			PFGSOUP.del_cookie('PFGSOUP_EDIT');
