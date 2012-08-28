@@ -60,5 +60,12 @@
     attribute="get_soupadapter_url"
     permission="zope2.View"
   />   
+
+  <browser:page
+    for="Products.PloneFormGen.interfaces.IPloneFormGenForm"
+    name="pfgsoup_select_thanks_page"
+    class=".action.ThanksPageSelectorView"
+    permission="zope2.View"
+  />   
    
 </configure>
