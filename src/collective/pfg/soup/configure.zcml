@@ -17,7 +17,7 @@
                 handler=".subscribers.create_catalogfactory"
     />
     <subscriber for="Products.PloneFormGen.interfaces.IPloneFormGenField
-                     zope.lifecyclevent.interfaces.IObjectRemovedEvent"
+                     zope.lifecycleevent.interfaces.IObjectRemovedEvent"
                 handler=".subscribers.rebuild_catalog"
     />
     <subscriber for="Products.PloneFormGen.interfaces.IPloneFormGenField
