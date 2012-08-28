@@ -7,7 +7,7 @@ class CheckView(BrowserView):
     """
 
     def has_soupadapter(self):
-        return self.get_soupadapter_url is not None
+        return self.get_soupadapter_url() is not None
 
     def get_soupadapter_url(self):
         for name in self.context.contentIds():
