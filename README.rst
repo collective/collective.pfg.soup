@@ -14,9 +14,8 @@ XXX COMPLETE ME
 
 TODO: 
 
-- only index fields are searchable/ sortable
-- Re-Edit a row. 
-- Edit-History,
+- only index fields are sortable - reflect this in UI
+- View Edit-History
 
 
 Installation
