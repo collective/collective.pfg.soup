@@ -1,0 +1,20 @@
+<table tal:condition="view/logentries" class="listing">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>Date</th>
+            <th>Fields</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr tal:repeat="entry view/logentries">
+            <td tal:content="entry/user" />
+            <td tal:content="entry/date" />
+            <td tal:content="python:', '.join(entry['fields'])" />
+        </tr>
+    </tbody>
+</table>
+<p tal:condition="not: view/logentries">
+    There are no modifications made on this entry.
+</p>
+ 
