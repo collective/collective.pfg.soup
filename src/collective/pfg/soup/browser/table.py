@@ -221,7 +221,11 @@ class TableDataView(TableView):
         columns = self.columns()
         aaData = list()
         length, lazydata = self._query(soup)
-        edithtml = '<a href="#" data-iid="%s" class="pfgsoup-edit">edit</a>'
+        # XXX Todo html from template
+        url = self.context.absolute_url()
+        html = '<a href="#" data-iid="%(iid)s" class="pfgsoup-edit">edit</a> '
+        html += ('<a href="%(url)s/@@pfgsouplog?iid=%(iid)s" '
+                 'class="pfgsoup-log">log</a>')
 
         def record2list(record):
             result = list()
@@ -232,7 +236,7 @@ class TableDataView(TableView):
                 if isinstance(value, datetime.datetime):
                     value = value.isoformat()
                 result.append(value)
-            result.append(edithtml % record.intid)
+            result.append(html % {'iid': record.intid, 'url': url})
             return result
         for lazyrecord in self._slice(lazydata):
             aaData.append(record2list(lazyrecord()))

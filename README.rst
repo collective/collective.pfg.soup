@@ -7,15 +7,17 @@ attributes (form-data). Attributes are indexed in an ``repoze.catalog``. Thus
 complex queries on the data are possible.
 
 It ships with an full-featured table view based on ``jquery.datatables``.
-Datatables server-side processing enables to have large datasets processed
-(searched over all columsn and by columns and sorted by column).
+Datatables server-side processing enables to have large datasets processed.
+It provides a search over all columns and by single columns. Each column 
+can be sorted.
 
-XXX COMPLETE ME
+Additional to the form data userid and timestamp of creations is logged.
 
-TODO: 
+A row can be edited. After save modification-timestamp, userid and changed
+fields are logged.
 
-- only index fields are sortable - reflect this in UI
-- View Edit-History
+CSV-Export of all data is possible, including creators userid, creation- and 
+last-modified-timestamp if selected.
 
 
 Installation
@@ -50,3 +52,9 @@ Contributors
 
 - Jens W. Klein <jens@bluedynamics.com>
 
+Todos
+=====
+
+- only indexed fields are sortable - reflect this in UI
+
+- create indexadapters for all fields

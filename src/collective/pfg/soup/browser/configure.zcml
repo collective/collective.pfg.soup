@@ -46,6 +46,14 @@
   />   
 
   <browser:page
+    for="..interfaces.IPfgSoupAdapter"
+    name="pfgsouplog"
+    class=".log.LogOverlayView"
+    template="log.pt"
+    permission="cmf.ModifyPortalContent"
+  />   
+
+  <browser:page
     for="Products.PloneFormGen.interfaces.IPloneFormGenForm"
     name="has_soupadapter"
     class=".action.CheckView"

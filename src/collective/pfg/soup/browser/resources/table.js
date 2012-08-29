@@ -70,6 +70,9 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 						  success: PFGSOUP.post
 					});
 			    });
+    			$("#pfgsoupdata tbody a.pfgsoup-log").prepOverlay({
+					subtype: 'ajax'							
+				});
 			},
 			"oLanguage": {
 		          "sUrl": "@@collective.js.datatables.translation"

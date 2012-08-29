@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '1.0-unreleased'
-shortdesc = 'PloneFormGen Action Adapter to store formdata in a souper-soup'
+version = '1.0-beta'
+shortdesc = 'PloneFormGen Action Adapter: store, show/search, edit, csv-export, based on souper.soup'
 longdesc =  open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()  
 longdesc += open(os.path.join(os.path.dirname(__file__), 'HISTORY.rst')).read()  
 longdesc += open(os.path.join(os.path.dirname(__file__), 'LICENSE.rst')).read()  
@@ -12,7 +12,7 @@ setup(name='collective.pfg.soup',
       description=shortdesc,
       long_description=longdesc,
       classifiers=[
-            'Development Status :: 5 - Production/Stable',
+            'Development Status :: 4 - Beta',
             'License :: OSI Approved :: GNU General Public License (GPL)',
             'Operating System :: OS Independent',
             'Programming Language :: Python', 
