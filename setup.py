@@ -34,6 +34,7 @@ setup(name='collective.pfg.soup',
             'Products.PloneFormGen',
             'collective.js.datatables',
             'souper.plone',
+            'bda.calendar.base',
       ],
       entry_points="""
       [z3c.autoinclude.plugin]
