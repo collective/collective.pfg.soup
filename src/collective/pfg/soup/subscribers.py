@@ -18,12 +18,7 @@ def rebuild_catalog(obj, event):
         parent = aq_parent(parent)
     if parent is None:
         return
-    sub = None
     for name in parent.contentIds():
         sub = parent[name]
         if IPfgSoupAdapter.providedBy(sub):
-            break
-    if sub is None:
-        return
-    soup = sub.get_soup()
-    soup.rebuild()
+            sub.get_soup().rebuild()
