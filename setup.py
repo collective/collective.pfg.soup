@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '1.0-beta2'
+version = '1.0-beta3'
 shortdesc = 'PloneFormGen Action Adapter: store, show/search, edit, csv-export, based on souper.soup'
 longdesc =  open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()  
 longdesc += open(os.path.join(os.path.dirname(__file__), 'HISTORY.rst')).read()  
@@ -23,6 +23,7 @@ setup(name='collective.pfg.soup',
       author='BlueDynamics Alliance',
       author_email='dev@bluedynamics.com',
       license='GPLv2',
+      url='https://pypi.python.org/pypi/collective.pfg.soup',
       packages=find_packages('src'),
       package_dir = {'': 'src'},
       namespace_packages=[],
