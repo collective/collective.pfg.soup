@@ -46,6 +46,13 @@
   />   
 
   <browser:page
+    for="Products.PloneFormGen.interfaces.IPloneFormGenForm"
+    name="pfgreeditdata"
+    class=".edit.ReeditData"
+    permission="zope2.View"
+  />   
+
+  <browser:page
     for="..interfaces.IPfgSoupAdapter"
     name="pfgsouplog"
     class=".log.LogOverlayView"

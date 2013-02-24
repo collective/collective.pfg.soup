@@ -23,9 +23,22 @@ from .config import (
 import logging
 logger = logging.getLogger("PloneFormGen")
 
-atautofields = list()
+atfields = list()
+
+atfields.append(atapi.BooleanField('reedit',
+        schemata='default',
+        default=False,
+        mode="w",
+        required=False,
+        widget=atapi.BooleanWidget(
+            label=u"Auto re-edit own form data",
+            description=u"Users  are shown their own form data on subsequent "
+                        u"visits in order to change/edit it.",
+        )
+))
+
 for aid in AUTOFIELDS:
-    atautofields.append(atapi.BooleanField('show_%s' % aid,
+    atfields.append(atapi.BooleanField('show_%s' % aid,
             schemata='default',
             default=False,
             mode="w",
@@ -35,7 +48,7 @@ for aid in AUTOFIELDS:
                 description=u"Show data column in table or not?",
             )
     ),)
-    atautofields.append(atapi.BooleanField('export_%s' % aid,
+    atfields.append(atapi.BooleanField('export_%s' % aid,
             schemata='default',
             default=False,
             mode="w",
@@ -52,7 +65,7 @@ class SoupAdapter(FormActionAdapter):
     """A form action adapter storing form input data in a soup.
     """
 
-    schema = FormAdapterSchema.copy() + atapi.Schema(atautofields)
+    schema = FormAdapterSchema.copy() + atapi.Schema(atfields)
 
     meta_type = 'SoupAdapter'
 

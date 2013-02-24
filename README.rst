@@ -52,6 +52,8 @@ Contributors
 
 - Jens W. Klein <jens@bluedynamics.com>
 
+License GPL 2
+
 Todos
 =====
 

@@ -4,14 +4,13 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 
 	$.extend(PFGSOUP, {
 		asInitVals: new Array(),
-		post: function(data, textStatus, jqXHR) {
-			var form = $('<form></form>');
-			var path = $('#pfgsoupdata').attr('data-formurl');
-	
+		post: function(result, textStatus, jqXHR) {			
+			var form = $('<form></form>');	
+			
 		    form.attr("method", "post");
-		    form.attr("action", path);
+		    form.attr("action", result.url);
 	
-		    $.each(data, function(key, value) {
+		    $.each(result.data, function(key, value) {
 		        var field = $('<input type="hidden"></input>');
 		        field.attr("name", key);
 		        field.attr("value", value);
@@ -112,12 +111,32 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 			message = message + "</dd></dl>";
 			message = $(message);
 			return message;
-		} );
+		} );		
 		$(window).unload(function(){
 			if ($('table#pfgsoupdata').length != 0 || $('div.pfg-form form.fgBaseEditForm').length != 0)  {
 				return;
 			}
 			PFGSOUP.del_cookie('PFGSOUP_EDIT');
 		});
+		$("#fg-base-edit").each(function() {
+			var iid = PFGSOUP.get_cookie('PFGSOUP_EDIT');
+			if (iid!=undefined) {
+				return ''
+			}			
+			PFGSOUP.del_cookie('PFGSOUP_EDIT');
+			$.ajax({
+				  url: '@@pfgreeditdata',
+				  dataType: 'json',
+				  success: function (result, textStatus, jqXHR) {
+					  if (result.status != 'ok') {
+						  PFGSOUP.del_cookie('PFGSOUP_EDIT');
+					      return;
+					  }
+					  PFGSOUP.set_cookie('PFGSOUP_EDIT', result.intid);
+					  PFGSOUP.post(result, textStatus, jqXHR);
+				  }					  
+			});			
+		});
+		// end SOUP Edit
 	});
 })(jQuery);

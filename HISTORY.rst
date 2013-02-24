@@ -2,6 +2,12 @@
 History
 =======
 
+1.0-beta3
+---------
+
+- option to make it possible to edit own data again (logged in users)
+  [jensens, 2013-02-24]
+
 1.0-beta2
 ---------
 

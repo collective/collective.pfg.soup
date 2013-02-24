@@ -35,7 +35,7 @@ class ThanksPageSelectorView(BaseView):
         iid = self.request.cookies.get('PFGSOUP_EDIT')
         if iid:
             # return sa.getId()
-            # rendering doesn not work for some resons ... wtf??
+            # rendering does not work for some reasons ... wtf??
             # so workaround: 
             transaction.commit()
             raise Redirect(sa.absolute_url())
