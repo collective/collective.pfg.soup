@@ -224,7 +224,8 @@ class TableDataView(TableView):
         # XXX Todo html from template
         url = self.context.absolute_url()
         html = '<a href="#" data-iid="%(iid)s" class="pfgsoup-edit">edit</a> '
-        html += ('<a href="%(url)s/@@pfgsouplog?iid=%(iid)s" '
+        html += '<a href="%(url)s/pfgsoupdel?iid=%(iid)s" class="pfgsoup-delete">remove</a> '
+        html += ('<a href="%(url)s/@@pfgsoupdel?iid=%(iid)s" '
                  'class="pfgsoup-log">log</a>')
 
         def record2list(record):

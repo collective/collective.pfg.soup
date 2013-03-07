@@ -2,6 +2,12 @@
 History
 =======
 
+1.0
+---
+
+- added feature: delete rows
+  [jensens, 2013-03-07]
+
 1.0-beta3
 ---------
 

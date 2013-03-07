@@ -72,6 +72,10 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
     			$("#pfgsoupdata tbody a.pfgsoup-log").prepOverlay({
 					subtype: 'ajax'							
 				});
+    			$('#pfgsoupdata tbody a.pfgsoup-delete').click(function(){
+    				/* TODO: nice jquerui modal dialog */
+    				return confirm('Are you sure?');			
+    			});    			
 			},
 			"oLanguage": {
 		          "sUrl": "@@collective.js.datatables.translation"

@@ -61,6 +61,13 @@
   />   
 
   <browser:page
+    for="..interfaces.IPfgSoupAdapter"
+    name="pfgsoupdel"
+    class=".remove.RemoveEntryView"
+    permission="cmf.ModifyPortalContent"
+  />   
+
+  <browser:page
     for="Products.PloneFormGen.interfaces.IPloneFormGenForm"
     name="has_soupadapter"
     class=".action.CheckView"
