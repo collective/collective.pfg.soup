@@ -60,3 +60,5 @@ Todos
 - only indexed fields are sortable - reflect this in UI
 
 - create indexadapters for all fields
+
+- binary handling
