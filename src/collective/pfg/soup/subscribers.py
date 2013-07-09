@@ -1,4 +1,10 @@
-from zope.app.component.hooks import getSite
+try:
+    # Plone < 4.3
+    from zope.app.component.hooks import setSite
+except ImportError:
+    # Plone >= 4.3
+    from zope.component.hooks import setSite  
+
 from Acquisition import aq_parent
 from Products.PloneFormGen.interfaces import IPloneFormGenForm
 from .interfaces import IPfgSoupAdapter
