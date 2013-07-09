@@ -30,7 +30,7 @@
         </thead>
         <tbody>
             <tr>              
-              <td tal:attributes="columnspan: python:len(columns)">Bitte warte. Lade Daten...</td>
+              <td tal:attributes="columnspan: python:len(columns)">Bitte warten. Lade Daten...</td>
             </tr>  
         </tbody>
         <tfoot>

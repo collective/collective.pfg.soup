@@ -120,7 +120,7 @@ class TableDataView(TableView):
 
     @memoize
     def _select_index_op(self, index, value):
-        # this is crap, bit no idea how to make it more efficient
+        # this is crap, but no idea how to make it more efficient
         try:
             index.applyContains(value)
         except NotImplementedError, e:
@@ -225,8 +225,9 @@ class TableDataView(TableView):
         url = self.context.absolute_url()
         html = '<a href="#" data-iid="%(iid)s" class="pfgsoup-edit">edit</a> '
         html += '<a href="%(url)s/pfgsoupdel?iid=%(iid)s" class="pfgsoup-delete">remove</a> '
-        html += ('<a href="%(url)s/@@pfgsoupdel?iid=%(iid)s" '
-                 'class="pfgsoup-log">log</a>')
+        html += ('<a href="%(url)s/@@pfgsouplog?iid=%(iid)s" '
+                 'class="pfgsoup-log">log</a>') 
+        
 
         def record2list(record):
             result = list()
