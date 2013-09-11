@@ -2,6 +2,12 @@
 History
 =======
 
+1.1
+---
+
+- fixed bug in subscriber and now ready for Plone 4.3
+  [jensens, 2013-09-11]
+
 1.0
 ---
 

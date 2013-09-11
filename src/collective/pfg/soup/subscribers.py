@@ -1,9 +1,9 @@
 try:
     # Plone < 4.3
-    from zope.app.component.hooks import setSite
+    from zope.app.component.hooks import getSite
 except ImportError:
     # Plone >= 4.3
-    from zope.component.hooks import setSite  
+    from zope.component.hooks import getSite
 
 from Acquisition import aq_parent
 from Products.PloneFormGen.interfaces import IPloneFormGenForm
