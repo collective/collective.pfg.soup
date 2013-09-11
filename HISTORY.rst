@@ -2,6 +2,18 @@
 History
 =======
 
+1.1.1
+-----
+
+- fixes broken release because of some git confusion
+  [jensens, 2013-09-11]
+
+1.1
+---
+
+- broken release, tries to: fix a bug while showing history.
+  [jensens, 2013-08-26]
+
 1.0
 ---
 
