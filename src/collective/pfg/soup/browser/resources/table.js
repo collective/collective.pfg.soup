@@ -9,15 +9,13 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 			
 		    form.attr("method", "post");
 		    form.attr("action", result.url);
-	
 		    $.each(result.data, function(key, value) {
 		        var field = $('<input type="hidden"></input>');
 		        field.attr("name", key);
-		        field.attr("value", value);
-	
+		        field.attr("value", value);	
 		        form.append(field);
 		    });
-		    $(document.body).append(form);
+	        $(document.body).append(form);
 		    form.submit();
 		},
 		set_cookie: function (c_name, value) {
@@ -61,7 +59,7 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 				$("#pfgsoupdata tbody a.pfgsoup-edit").click(function() {
 					var iid = $(this).attr('data-iid');
 					var url = $('#pfgsoupdata').attr('data-editurl');
-					PFGSOUP.set_cookie('PFGSOUP_EDIT', iid);
+					PFGSOUP.set_cookie('PFGSOUP_POST', iid);
 					$.ajax({
 						  url: url,
 						  dataType: 'json',
@@ -106,7 +104,7 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 		
 		// below here: SOUP EDIT
 		$("div.pfg-form form.fgBaseEditForm").before(function() {
-			var iid = PFGSOUP.get_cookie('PFGSOUP_EDIT');
+			var iid = PFGSOUP.get_cookie('PFGSOUP_POST');
 			if (iid==undefined) {
 				return ''
 			}
@@ -123,23 +121,45 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 			PFGSOUP.del_cookie('PFGSOUP_EDIT');
 		});
 		$("#fg-base-edit").each(function() {
-			var iid = PFGSOUP.get_cookie('PFGSOUP_EDIT');
+			var spinner = $('#ajax-spinner'); 
+			spinner.show();
+			var failed = PFGSOUP.get_cookie('PFGSOUP_LOAD_FAILED');
+			if (failed!=undefined) {
+				PFGSOUP.del_cookie('PFGSOUP_POST');
+				PFGSOUP.del_cookie('PFGSOUP_EDIT');
+				PFGSOUP.del_cookie('PFGSOUP_LOAD_FAILED');
+				spinner.hide();
+				return '';
+			}
+			var iid = PFGSOUP.get_cookie('PFGSOUP_POST');
 			if (iid!=undefined) {
-				return ''
-			}			
-			PFGSOUP.del_cookie('PFGSOUP_EDIT');
+				PFGSOUP.del_cookie('PFGSOUP_POST');
+                PFGSOUP.set_cookie('PFGSOUP_EDIT', iid);
+				spinner.hide();
+				return '';
+			}	
 			$.ajax({
 				  url: '@@pfgreeditdata',
 				  dataType: 'json',
 				  success: function (result, textStatus, jqXHR) {
 					  if (result.status != 'ok') {
 						  PFGSOUP.del_cookie('PFGSOUP_EDIT');
+						  PFGSOUP.del_cookie('PFGSOUP_POST');
+						  PFGSOUP.set_cookie('PFGSOUP_LOAD_FAILED', '1');
+                          spinner.hide();
 					      return;
 					  }
-					  PFGSOUP.set_cookie('PFGSOUP_EDIT', result.intid);
+					  PFGSOUP.set_cookie('PFGSOUP_POST', result.intid);
 					  PFGSOUP.post(result, textStatus, jqXHR);
 				  }					  
 			});			
+		});
+		$("#fg-base-edit").submit(function() {
+			var iid = PFGSOUP.get_cookie('PFGSOUP_EDIT');			
+			if (iid != undefined) {
+				PFGSOUP.set_cookie('PFGSOUP_POST', iid);
+			}
+            PFGSOUP.del_cookie('PFGSOUP_EDIT');
 		});
 		// end SOUP Edit
 	});

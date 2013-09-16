@@ -26,7 +26,8 @@ Installation
 Just depend in your buildout on the egg ``collective.pfg.soup``. ZCML is
 loaded automagically with z3c.autoinclude.
 
-Install it as an addon in Plone control-panel or portal_setup.
+Install ``Soup Adapter for PloneFormGen`` as an addon in Plone control-panel or 
+portal_setup.
 
 This package is written for Plone 4.2 or later.
 
@@ -52,6 +53,8 @@ Contributors
 
 - Jens W. Klein <jens@bluedynamics.com>
 
+- Benjamin Stefaner
+
 License GPL 2
 
 Todos
@@ -59,6 +62,6 @@ Todos
 
 - only indexed fields are sortable - reflect this in UI
 
-- create indexadapters for all fields
+- create indexadapters for all field types
 
 - binary handling

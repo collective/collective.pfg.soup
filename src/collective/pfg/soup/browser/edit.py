@@ -5,6 +5,7 @@ from Products.Five import BrowserView
 from repoze.catalog.query import Eq
 from ..interfaces import IPfgSoupAdapter
 
+
 class EditData(BrowserView):
 
     def _get_data(self, record):
@@ -49,7 +50,10 @@ class ReeditData(EditData):
         userid = user.getId()
         soup = sa.get_soup()
         result = soup.query(Eq(u'_auto_userid', userid))
-        record = result.next()
+        try:
+            record = result.next()
+        except StopIteration:
+            return self.failed()
         if not record:
             return self.failed()
         result = dict()
@@ -58,5 +62,3 @@ class ReeditData(EditData):
         result['intid'] = str(record.intid)
         result['status'] = 'ok'
         return json.dumps(result)
-
-

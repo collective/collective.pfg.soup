@@ -88,7 +88,7 @@ class SoupAdapter(FormActionAdapter):
         now = tzawarenow()
         soup = self.get_soup()
         modified_fields = list()
-        iid = self.REQUEST.cookies.get('PFGSOUP_EDIT', None)
+        iid = self.REQUEST.cookies.get('PFGSOUP_POST', None)
         if iid:
             iid = int(iid)
             data = soup.get(iid)
@@ -118,7 +118,7 @@ class SoupAdapter(FormActionAdapter):
                 if '_auto_log' not in data.attrs:
                     data.attrs['_auto_log'] = PersistentList()
                 data.attrs['_auto_log'].append(log)
-            self.REQUEST.response.expireCookie('PFGSOUP_EDIT', path='/')
+            self.REQUEST.response.expireCookie('PFGSOUP_POST', path='/')
             # XXX redirect to table
             # self.REQUEST.response.redirect(...)
             return
