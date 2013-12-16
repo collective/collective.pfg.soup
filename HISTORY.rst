@@ -2,6 +2,12 @@
 History
 =======
 
+1.3
+---
+
+- fixes #4 Export with non-ascii in labels fails.
+  [jensens, 2013-12-16]
+
 1.2
 ---
 
