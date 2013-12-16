@@ -24,7 +24,7 @@ class CSVView(TableView):
         sio = StringIO()
         ex = csv.writer(sio, dialect='excel-colon')
         labels = [columns[_]['label'] for _ in columns]
-        ex.writerow(labels)
+        ex.writerow([_.encode('utf8') for _ in labels])
         iids = soup.catalog['_auto_created'].sort(soup.storage.data.keys())
         for iid in iids:
             record = soup.storage.data[iid]
