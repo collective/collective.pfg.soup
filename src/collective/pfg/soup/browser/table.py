@@ -1,5 +1,6 @@
 import json
 import datetime
+import logging
 from odict import odict
 from Acquisition import aq_parent
 from Products.Five import BrowserView
@@ -7,11 +8,21 @@ from plone.memoize.view import memoize
 from repoze.catalog.query import (
     Contains,
     Or,
-    Any,
     Eq,
 )
+from zope.component import ComponentLookupError
 from souper.soup import LazyRecord
 from ..config import AUTOFIELDS
+from ..storage import PfgCatalogFactory
+
+try:
+    # Plone < 4.3
+    from zope.app.component.hooks import getSite
+except ImportError:
+    # Plone >= 4.3
+    from zope.component.hooks import getSite
+
+logger = logging.getLogger('collective.pfg.soup.subscribers')
 
 
 class TableView(BrowserView):
@@ -25,7 +36,15 @@ class TableView(BrowserView):
     def columns(self):
         pfg = aq_parent(self.context)
         soup = self.context.get_soup()
-        catalog = soup.catalog
+        try:
+            catalog = soup.catalog
+        except ComponentLookupError:
+            # ugly workaround - for some reason after copy the factory is gone
+            logger.warn("Soup catalog wasnt created correctly after copy of "
+                        "soup adapter. Auto-healing this now.")
+            sm = getSite().getSiteManager()
+            sm.registerUtility(factory=PfgCatalogFactory, name=soup.soup_name)
+            catalog = soup.catalog
         result = odict()
         for field in pfg._getFieldObjects():
             if not field.Schema()[self.enabled_field].get(field):
@@ -72,7 +91,7 @@ class TableDataView(TableView):
     def _extract_sort(self):
         sortparams = dict()
         columns = self.columns()
-        # sortingcols, sortable, searchable are not used for now, but to be 
+        # sortingcols, sortable, searchable are not used for now, but to be
         # complete it gets extracted
         sortparams['sortingcols'] = self.request.form.get('iSortingCols')
         try:
@@ -226,8 +245,8 @@ class TableDataView(TableView):
         html = '<a href="#" data-iid="%(iid)s" class="pfgsoup-edit">edit</a> '
         html += '<a href="%(url)s/pfgsoupdel?iid=%(iid)s" class="pfgsoup-delete">remove</a> '
         html += ('<a href="%(url)s/@@pfgsouplog?iid=%(iid)s" '
-                 'class="pfgsoup-log">log</a>') 
-        
+                 'class="pfgsoup-log">log</a>')
+
 
         def record2list(record):
             result = list()
