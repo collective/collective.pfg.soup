@@ -2,6 +2,7 @@ import json
 from Acquisition import aq_parent
 from AccessControl import getSecurityManager
 from Products.Five import BrowserView
+from ZPublisher.HTTPRequest import record as httprecord
 from repoze.catalog.query import Eq
 from ..interfaces import IPfgSoupAdapter
 
@@ -13,8 +14,19 @@ class EditData(BrowserView):
         for name in record.attrs:
             if name.startswith('_auto_'):
                 continue
-            data[name] = record.attrs[name]
-            # XXX binary data not handled
+            if isinstance(record.attrs[name], httprecord):
+                # special for Rating Scale Field or other fields
+                # resulting in ZPublisher.HTTPRequest.record as value
+                for key in record.attrs[name]:
+                    recname = "%s.%s:record" % (name, key)
+                    data[recname] = record.attrs[name][key]
+            else:
+                data[name] = record.attrs[name]
+                try:
+                    json.dumps(data[name])
+                except TypeError:
+                    # XXX binary data or structures not handled well
+                    data[name] = str(record.attrs[name])
         return data
 
     def __call__(self):

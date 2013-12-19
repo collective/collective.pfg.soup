@@ -2,6 +2,12 @@
 History
 =======
 
+1.5
+---
+
+- deal with Rating Scale Field. fixes #6.
+  [jensens, 2013-12-19]
+
 1.4
 ---
 

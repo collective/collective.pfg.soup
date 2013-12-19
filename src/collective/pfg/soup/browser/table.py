@@ -254,8 +254,14 @@ class TableDataView(TableView):
                 value = record.attrs.get(colname, '')
                 if isinstance(value, list):
                     value = ', '.join(value)
-                if isinstance(value, datetime.datetime):
+                elif isinstance(value, datetime.datetime):
                     value = value.isoformat()
+                elif isinstance(value, dict):
+                    value = ', '.join([str(_) for _ in value.items])
+                try:
+                    json.dumps(value)
+                except TypeError:
+                    value = str(value)
                 result.append(value)
             result.append(html % {'iid': record.intid, 'url': url})
             return result
