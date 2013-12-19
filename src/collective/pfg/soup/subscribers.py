@@ -1,3 +1,4 @@
+from zope.component import ComponentLookupError
 try:
     # Plone < 4.3
     from zope.app.component.hooks import getSite
@@ -9,6 +10,10 @@ from Acquisition import aq_parent
 from Products.PloneFormGen.interfaces import IPloneFormGenForm
 from .interfaces import IPfgSoupAdapter
 from .storage import PfgCatalogFactory
+
+import logging
+
+logger = logging.getLogger('collective.pfg.soup.subscribers')
 
 
 def create_catalogfactory(obj, event):
@@ -27,4 +32,7 @@ def rebuild_catalog(obj, event):
     for name in parent.contentIds():
         sub = parent[name]
         if IPfgSoupAdapter.providedBy(sub):
-            sub.get_soup().rebuild()
+            try:
+                sub.get_soup().rebuild()
+            except ComponentLookupError:
+                logger.warn('Can not fetch a soup for %s' % obj)

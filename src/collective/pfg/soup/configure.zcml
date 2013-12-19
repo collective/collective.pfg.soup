@@ -16,6 +16,12 @@
                      Products.Archetypes.interfaces.IObjectInitializedEvent"
                 handler=".subscribers.create_catalogfactory"
     />
+    <subscriber for=".interfaces.IPfgSoupAdapter
+                     zope.lifecycleevent.IObjectCopiedEvent"
+                handler=".subscribers.create_catalogfactory"
+    />
+    
+    
     <subscriber for="Products.PloneFormGen.interfaces.IPloneFormGenField
                      zope.lifecycleevent.interfaces.IObjectRemovedEvent"
                 handler=".subscribers.rebuild_catalog"
