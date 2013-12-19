@@ -2,6 +2,12 @@
 History
 =======
 
+1.4
+---
+
+- workaround in order to fix #5 On copy soup is not copied.
+  [jensens, 2013-12-19]
+
 1.3
 ---
 
