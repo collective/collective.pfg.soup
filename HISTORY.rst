@@ -2,6 +2,12 @@
 History
 =======
 
+1.5.1
+-----
+
+- prevent re-edit javscript from fetching cached requests. fixes #7
+  [jensens, 2014-03-07]
+
 1.5
 ---
 

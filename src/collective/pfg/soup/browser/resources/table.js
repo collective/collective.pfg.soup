@@ -141,6 +141,7 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 			$.ajax({
 				  url: '@@pfgreeditdata',
 				  dataType: 'json',
+				  cache: false,
 				  success: function (result, textStatus, jqXHR) {
 					  if (result.status != 'ok') {
 						  PFGSOUP.del_cookie('PFGSOUP_EDIT');
