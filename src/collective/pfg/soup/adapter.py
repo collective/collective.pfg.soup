@@ -25,6 +25,18 @@ logger = logging.getLogger("PloneFormGen")
 
 atfields = list()
 
+atfields.append(atapi.BooleanField('id_for_soupname',
+        schemata='default',
+        default=False,
+        mode="w",
+        required=False,
+        widget=atapi.BooleanWidget(
+            label=u"Use shortname as soup identifier",
+            description=u"Allows to save data to a shared soup "
+                        u"based on shortname.",
+        )
+))
+
 atfields.append(atapi.BooleanField('reedit',
         schemata='default',
         default=False,
@@ -76,7 +88,10 @@ class SoupAdapter(FormActionAdapter):
 
     @property
     def _soup_name(self):
-        return 'PFGSOUP%s' % self.UID()
+        if IPfgSoupAdapter(self).id_for_soupname:
+            return 'PFGSOUP_%s' % self.getId()
+        else:
+            return 'PFGSOUP%s' % self.UID()
 
     def get_soup(self):
         return get_soup(self._soup_name, self)
