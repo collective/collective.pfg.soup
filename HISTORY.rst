@@ -2,7 +2,12 @@
 History
 =======
 
-1.5.1
+1.7.dev0
+-----
+- nothing yet
+
+
+1.6
 -----
 
 - prevent re-edit javscript from fetching cached requests. fixes #7
@@ -63,7 +68,7 @@ History
 ---------
 
 1.7 (unreleased)
-                
+
 
 - Nothing changed yet.
 
