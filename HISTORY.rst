@@ -62,6 +62,12 @@ History
 1.0-beta3
 ---------
 
+1.7 (unreleased)
+                
+
+- Nothing changed yet.
+
+
 1.6 (2014-12-16)
   [jensens, 2013-02-24]
 

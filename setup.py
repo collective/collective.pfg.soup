@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '1.6'
+version = '1.7.dev0'
 shortdesc = 'PloneFormGen Adapter: store, show/search, edit, csv-export, based on souper.soup'
 longdesc =  open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()  
 longdesc += open(os.path.join(os.path.dirname(__file__), 'HISTORY.rst')).read()  
