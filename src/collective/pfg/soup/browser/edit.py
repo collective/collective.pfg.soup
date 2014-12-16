@@ -43,6 +43,7 @@ class EditData(BrowserView):
 class ReeditData(EditData):
 
     def failed(self):
+        self.request.response.setHeader("Content-type", "application/json")
         return json.dumps(dict(status='failed'))
 
     def get_soupadapter(self):
