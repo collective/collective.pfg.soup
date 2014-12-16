@@ -8,7 +8,7 @@ complex queries on the data are possible.
 
 It ships with an full-featured table view based on ``jquery.datatables``.
 Datatables server-side processing enables to have large datasets processed.
-It provides a search over all columns and by single columns. Each column 
+It provides a search over all columns and by single columns. Each column
 can be sorted.
 
 Additional to the form data userid and timestamp of creations is logged.
@@ -16,7 +16,7 @@ Additional to the form data userid and timestamp of creations is logged.
 A row can be edited. After save modification-timestamp, userid and changed
 fields are logged.
 
-CSV-Export of all data is possible, including creators userid, creation- and 
+CSV-Export of all data is possible, including creators userid, creation- and
 last-modified-timestamp if selected.
 
 
@@ -26,7 +26,7 @@ Installation
 Just depend in your buildout on the egg ``collective.pfg.soup``. ZCML is
 loaded automagically with z3c.autoinclude.
 
-Install ``Soup Adapter for PloneFormGen`` as an addon in Plone control-panel or 
+Install ``Soup Adapter for PloneFormGen`` as an addon in Plone control-panel or
 portal_setup.
 
 This package is written for Plone 4.2 or later.
@@ -54,6 +54,8 @@ Contributors
 - Jens W. Klein <jens@bluedynamics.com>
 
 - Benjamin Stefaner
+
+- Peter Holzer
 
 License GPL 2
 

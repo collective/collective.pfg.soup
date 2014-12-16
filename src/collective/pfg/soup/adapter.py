@@ -25,6 +25,18 @@ logger = logging.getLogger("PloneFormGen")
 
 atfields = list()
 
+atfields.append(atapi.StringField('soup_name',
+        schemata='default',
+        default='',
+        mode="w",
+        required=False,
+        widget=atapi.StringWidget(
+            label=u"ID for soup to use as storeage",
+            description=u"Enter an existing or new ID to identify "
+                        u"the target soup.",
+        )
+))
+
 atfields.append(atapi.BooleanField('reedit',
         schemata='default',
         default=False,
@@ -76,7 +88,10 @@ class SoupAdapter(FormActionAdapter):
 
     @property
     def _soup_name(self):
-        return 'PFGSOUP%s' % self.UID()
+        if IPfgSoupAdapter(self).soup_name.strip():
+            return 'PFGNAMEDSOUP_%s' % IPfgSoupAdapter(self).soup_name.strip()
+        else:
+            return 'PFGSOUP%s' % self.UID()
 
     def get_soup(self):
         return get_soup(self._soup_name, self)
