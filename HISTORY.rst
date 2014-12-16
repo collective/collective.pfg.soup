@@ -11,6 +11,9 @@ History
 - allow shared soup storage based on soup_name
   [agitator, 2014-12-16]
 
+- added json response headers
+  [agitator, 2014-12-16]
+
 1.5
 ---
 

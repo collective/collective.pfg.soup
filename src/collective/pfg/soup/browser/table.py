@@ -116,6 +116,7 @@ class TableDataView(TableView):
             sdir = self.request.form.get('sSortDir_%d' % idx, None)
             if sdir is not None:
                 sortparams['reverse'] = sdir == 'desc'
+        self.request.response.setHeader("Content-type", "application/json")
         return sortparams
 
 

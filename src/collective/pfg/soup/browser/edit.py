@@ -36,6 +36,7 @@ class EditData(BrowserView):
         result = dict()
         result['data'] = self._get_data(record)
         result['url'] = aq_parent(self.context).absolute_url()
+        self.request.response.setHeader("Content-type", "application/json")
         return json.dumps(result)
 
 
@@ -73,4 +74,5 @@ class ReeditData(EditData):
         result['url'] = self.context.absolute_url()
         result['intid'] = str(record.intid)
         result['status'] = 'ok'
+        self.request.response.setHeader("Content-type", "application/json")
         return json.dumps(result)
