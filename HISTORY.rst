@@ -8,6 +8,9 @@ History
 - prevent re-edit javscript from fetching cached requests. fixes #7
   [jensens, 2014-03-07]
 
+- allow shared soup storage based on soup_name
+  [agitator, 2014-12-16]
+
 1.5
 ---
 
@@ -29,9 +32,9 @@ History
 1.2
 ---
 
-- fixes some problems in form re-edit mechanism. Before this change a form 
-  lost its data if a user clicked on view tab with edit cookie set already. 
-  Also re-edit resulted in double entries in some cases. With this change also 
+- fixes some problems in form re-edit mechanism. Before this change a form
+  lost its data if a user clicked on view tab with edit cookie set already.
+  Also re-edit resulted in double entries in some cases. With this change also
   issue #1 was fixed, which was in fact a side effect of the above.
   [jensens, 2013-09-16]
 
