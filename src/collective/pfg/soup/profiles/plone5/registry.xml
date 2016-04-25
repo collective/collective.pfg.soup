@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<registry xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+          i18n:domain="collective.pfg.soup">
+
+  <records prefix="plone.bundles/pfg-soup"
+           interface='Products.CMFPlone.interfaces.IBundleRegistry'>
+    <value key="enabled">True</value>
+    <value key="jscompilation">++resource++collective.pfg.soup/table.js</value>
+    <value key="csscompilation">++resource++collective.pfg.soup/pfg-soup.css</value>
+    <value key="compile">False</value>
+    <value key="depends">plone</value>
+  </records>
+
+</registry>

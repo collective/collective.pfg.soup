@@ -3,8 +3,8 @@ import sys, os
 
 version = '1.7.dev0'
 shortdesc = 'PloneFormGen Adapter: store, show/search, edit, csv-export, based on souper.soup'
-longdesc =  open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()  
-longdesc += open(os.path.join(os.path.dirname(__file__), 'HISTORY.rst')).read()  
+longdesc =  open(os.path.join(os.path.dirname(__file__), 'README.rst')).read()
+longdesc += open(os.path.join(os.path.dirname(__file__), 'HISTORY.rst')).read()
 # longdesc += open(os.path.join(os.path.dirname(__file__), 'LICENSE.rst')).read()
 
 setup(name='collective.pfg.soup',
@@ -15,7 +15,7 @@ setup(name='collective.pfg.soup',
             'Development Status :: 5 - Production/Stable',
             'License :: OSI Approved :: GNU General Public License (GPL)',
             'Operating System :: OS Independent',
-            'Programming Language :: Python', 
+            'Programming Language :: Python',
             'Topic :: Software Development',
             "Framework :: Plone",
       ],
@@ -26,7 +26,7 @@ setup(name='collective.pfg.soup',
       url='https://pypi.python.org/pypi/collective.pfg.soup',
       packages=find_packages('src'),
       package_dir = {'': 'src'},
-      namespace_packages=[],
+      namespace_packages=['collective'],
       include_package_data=True,
       zip_safe=True,
       install_requires=[

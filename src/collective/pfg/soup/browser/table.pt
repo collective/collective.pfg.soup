@@ -10,14 +10,15 @@
 
 <metal:main fill-slot="main">
   <tal:main-macro metal:define-macro="main">
-    
+
     <h1 class="documentFirstHeading">Form Data Manager</h1>
-    
+
     <table id="pfgsoupdata"
            tal:define="columns view/columns"
            tal:attributes="data-ajaxurl python:context.absolute_url()+'/@@pfgsoupdata';
                            data-editurl python:context.absolute_url()+'/@@pfgeditdata';
-                           data-formurl python:context.aq_parent.absolute_url();">
+                           data-formurl python:context.aq_parent.absolute_url();
+                           data-auth-token string:${context/@@authenticator/token};">
         <thead>
            <tr>
              <tal:loop repeat="colname columns">
@@ -29,17 +30,17 @@
            </tr>
         </thead>
         <tbody>
-            <tr>              
+            <tr>
               <td tal:attributes="columnspan: python:len(columns)">Bitte warten. Lade Daten...</td>
-            </tr>  
+            </tr>
         </tbody>
         <tfoot>
            <tr>
              <tal:loop repeat="colname columns">
                <th>
-                   <input type="text" class="search_init" 
-                          value="Search engines" 
-                          name="search_engine"                          
+                   <input type="text" class="search_init"
+                          value="Search engines"
+                          name="search_engine"
                           tal:attributes="value python:'Suche in '+ columns[colname]['label'];
                                           name python:colname;"
                           tal:condition="python:columns[colname]['searchable']">
@@ -48,7 +49,7 @@
              <th><!-- Actions --></th>
            </tr>
         </tfoot>
-        
+
     </table>
     <br />
     <div>

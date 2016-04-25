@@ -5,13 +5,15 @@
     i18n_domain="collective.pfg.soup">
 
     <includeDependencies package="." />
-    
-    <include package=".browser" />    
+
+    <include file="profiles.zcml" />
+
+    <include package=".browser" />
 
     <class class=".adapter.SoupAdapter"/>
 
     <five:registerPackage package="." initialize=".initialize" />
-    
+
     <subscriber for=".interfaces.IPfgSoupAdapter
                      Products.Archetypes.interfaces.IObjectInitializedEvent"
                 handler=".subscribers.create_catalogfactory"
@@ -20,8 +22,8 @@
                      zope.lifecycleevent.IObjectCopiedEvent"
                 handler=".subscribers.create_catalogfactory"
     />
-    
-    
+
+
     <subscriber for="Products.PloneFormGen.interfaces.IPloneFormGenField
                      zope.lifecycleevent.interfaces.IObjectRemovedEvent"
                 handler=".subscribers.rebuild_catalog"
@@ -30,26 +32,18 @@
                      Products.Archetypes.interfaces.IObjectInitializedEvent"
                 handler=".subscribers.rebuild_catalog"
     />
-    
-    <genericsetup:registerProfile
-        name="default"
-        title="Soup Adapter for PloneFormGen"
-        directory="profile"
-        description="A PloneFormGen adapter to save form data in a Soup"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
-        
+
     <!-- register index adapters -->
-    <adapter factory=".indexadapters.TextIndexCreator" 
-             for="Products.PloneFormGen.content.fields.FGStringField" />    
-    <adapter factory=".indexadapters.TextIndexCreator" 
-             for="Products.PloneFormGen.content.fields.FGTextField" />    
-    <adapter factory=".indexadapters.KeywordIndexCreator" 
+    <adapter factory=".indexadapters.TextIndexCreator"
+             for="Products.PloneFormGen.content.fields.FGStringField" />
+    <adapter factory=".indexadapters.TextIndexCreator"
+             for="Products.PloneFormGen.content.fields.FGTextField" />
+    <adapter factory=".indexadapters.KeywordIndexCreator"
              for="Products.PloneFormGen.content.fields.FGLinesField" />
-                 
+
     <!-- register schema extender -->
     <adapter for="Products.PloneFormGen.interfaces.IPloneFormGenField"
              factory=".extender.PfgFieldSoupExtender"
              provides="archetypes.schemaextender.interfaces.IOrderableSchemaExtender" />
-             
+
 </configure>

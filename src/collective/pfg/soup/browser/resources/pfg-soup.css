@@ -1,0 +1,6 @@
+.icon-soupformdata::before,
+.contenttype-soupadapter::before,
+.icon-soupformdata::after,
+.contenttype-soupadapter::after {
+    content: "";
+}

@@ -4,7 +4,8 @@ History
 
 1.7.dev0
 -----
-- nothing yet
+- fixed autoinclude, Plone 5 compatibility
+  [agitator]
 
 
 1.6

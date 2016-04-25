@@ -1,17 +1,16 @@
 import json
 import datetime
 import logging
-from odict import odict
 from Acquisition import aq_parent
-from Products.Five import BrowserView
+from odict import odict
 from plone.memoize.view import memoize
-from repoze.catalog.query import (
-    Contains,
-    Or,
-    Eq,
-)
-from zope.component import ComponentLookupError
+from plone.protect.utils import addTokenToUrl
+from Products.Five import BrowserView
+from repoze.catalog.query import Contains
+from repoze.catalog.query import Eq
+from repoze.catalog.query import Or
 from souper.soup import LazyRecord
+from zope.component import ComponentLookupError
 from ..config import AUTOFIELDS
 from ..storage import PfgCatalogFactory
 
@@ -21,6 +20,15 @@ try:
 except ImportError:
     # Plone >= 4.3
     from zope.component.hooks import getSite
+
+try:
+    # Plone 5
+    from plone.protect.authenticator import createToken
+    PLONE_PROTECT = True
+except ImportError:
+    PLONE_PROTECT = False
+
+
 
 logger = logging.getLogger('collective.pfg.soup.subscribers')
 
@@ -242,11 +250,19 @@ class TableDataView(TableView):
         aaData = list()
         length, lazydata = self._query(soup)
         # XXX Todo html from template
-        url = self.context.absolute_url()
-        html = '<a href="#" data-iid="%(iid)s" class="pfgsoup-edit">edit</a> '
-        html += '<a href="%(url)s/pfgsoupdel?iid=%(iid)s" class="pfgsoup-delete">remove</a> '
-        html += ('<a href="%(url)s/@@pfgsouplog?iid=%(iid)s" '
-                 'class="pfgsoup-log">log</a>')
+        if PLONE_PROTECT:
+            token = createToken()
+            url = self.context.absolute_url()
+            html = '<a href="#" data-iid="%(iid)s" class="pfgsoup-edit">edit</a> '
+            html += '<a href="%(url)s/pfgsoupdel?iid=%(iid)s&_authenticator=%(token)s" class="pfgsoup-delete">remove</a> '
+            html += ('<a href="%(url)s/@@pfgsouplog?iid=%(iid)s&_authenticator=%(token)s" '
+                     'class="pfgsoup-log">log</a>')
+        else:
+            url = self.context.absolute_url()
+            html = '<a href="#" data-iid="%(iid)s" class="pfgsoup-edit">edit</a> '
+            html += '<a href="%(url)s/pfgsoupdel?iid=%(iid)s" class="pfgsoup-delete">remove</a> '
+            html += ('<a href="%(url)s/@@pfgsouplog?iid=%(iid)s" '
+                     'class="pfgsoup-log">log</a>')
 
 
         def record2list(record):
@@ -264,7 +280,10 @@ class TableDataView(TableView):
                 except TypeError:
                     value = str(value)
                 result.append(value)
-            result.append(html % {'iid': record.intid, 'url': url})
+            if PLONE_PROTECT:
+                result.append(html % {'iid': record.intid, 'url': url, 'token': token})
+            else:
+                result.append(html % {'iid': record.intid, 'url': url})
             return result
         for lazyrecord in self._slice(lazydata):
             aaData.append(record2list(lazyrecord()))

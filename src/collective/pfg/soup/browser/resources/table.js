@@ -4,15 +4,15 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 
 	$.extend(PFGSOUP, {
 		asInitVals: new Array(),
-		post: function(result, textStatus, jqXHR) {			
-			var form = $('<form></form>');	
-			
+		post: function(result, textStatus, jqXHR) {
+			var form = $('<form></form>');
+
 		    form.attr("method", "post");
 		    form.attr("action", result.url);
 		    $.each(result.data, function(key, value) {
 		        var field = $('<input type="hidden"></input>');
 		        field.attr("name", key);
-		        field.attr("value", value);	
+		        field.attr("value", value);
 		        form.append(field);
 		    });
 	        $(document.body).append(form);
@@ -49,8 +49,8 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 			"bStateSave": true,
 			"aaSorting": [],
 			"aoColumnDefs": [
-			     {"aTargets": [-1], 
-			      "bSortable": false, 
+			     {"aTargets": [-1],
+			      "bSortable": false,
 			      "bSearchable": false,
 			      "sWidth": "3em"
 			     }
@@ -68,32 +68,32 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 					});
 			    });
     			$("#pfgsoupdata tbody a.pfgsoup-log").prepOverlay({
-					subtype: 'ajax'							
+					subtype: 'ajax'
 				});
     			$('#pfgsoupdata tbody a.pfgsoup-delete').click(function(){
     				/* TODO: nice jquerui modal dialog */
-    				return confirm('Are you sure?');			
-    			});    			
+    				return confirm('Are you sure?');
+    			});
 			},
 			"oLanguage": {
 		          "sUrl": "@@collective.js.datatables.translation"
-		      }			
+		      }
 		});
 		$("#pfgsoupdata tfoot input").keyup( function () {
 			/* Filter on the column (the index) of this element */
 			oTable.fnFilter( this.value, $("#pfgsoupdata tfoot input").index(this) );
-		} );		
+		} );
 		$("#pfgsoupdata tfoot input").each( function (i) {
 			PFGSOUP.asInitVals[i] = this.value;
 		} );
-		
+
 		$("#pfgsoupdata tfoot input").focus( function () {
 			if ( this.className == "search_init" )
 			{
 				this.className = "";
 				this.value = "";
 			}
-		} );		
+		} );
 		$("#pfgsoupdata tfoot input").blur( function (i) {
 			if ( this.value == "" )
 			{
@@ -101,7 +101,7 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 				this.value = PFGSOUP.asInitVals[$("#pfgsoupdata tfoot input").index(this)];
 			}
 		} );
-		
+
 		// below here: SOUP EDIT
 		$("div.pfg-form form.fgBaseEditForm").before(function() {
 			var iid = PFGSOUP.get_cookie('PFGSOUP_POST');
@@ -113,7 +113,7 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 			message = message + "</dd></dl>";
 			message = $(message);
 			return message;
-		} );		
+		} );
 		$(window).unload(function(){
 			if ($('table#pfgsoupdata').length != 0 || $('div.pfg-form form.fgBaseEditForm').length != 0)  {
 				return;
@@ -121,7 +121,7 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 			PFGSOUP.del_cookie('PFGSOUP_EDIT');
 		});
 		$("#fg-base-edit").each(function() {
-			var spinner = $('#ajax-spinner'); 
+			var spinner = $('#ajax-spinner');
 			spinner.show();
 			var failed = PFGSOUP.get_cookie('PFGSOUP_LOAD_FAILED');
 			if (failed!=undefined) {
@@ -137,7 +137,7 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
                 PFGSOUP.set_cookie('PFGSOUP_EDIT', iid);
 				spinner.hide();
 				return '';
-			}	
+			}
 			$.ajax({
 				  url: '@@pfgreeditdata',
 				  dataType: 'json',
@@ -152,11 +152,11 @@ if (typeof(window['PFGSOUP']) == "undefined") PFGSOUP = {};
 					  }
 					  PFGSOUP.set_cookie('PFGSOUP_POST', result.intid);
 					  PFGSOUP.post(result, textStatus, jqXHR);
-				  }					  
-			});			
+				  }
+			});
 		});
 		$("#fg-base-edit").submit(function() {
-			var iid = PFGSOUP.get_cookie('PFGSOUP_EDIT');			
+			var iid = PFGSOUP.get_cookie('PFGSOUP_EDIT');
 			if (iid != undefined) {
 				PFGSOUP.set_cookie('PFGSOUP_POST', iid);
 			}
