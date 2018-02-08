@@ -30,12 +30,12 @@ setup(name='collective.pfg.soup',
       include_package_data=True,
       zip_safe=True,
       install_requires=[
-            'setuptools',
-            'Plone',
-            'Products.PloneFormGen',
-            'collective.js.datatables',
-            'souper.plone',
             'bda.calendar.base',
+            'collective.js.datatables',
+            'Products.CMFPlone',
+            'Products.PloneFormGen',
+            'setuptools',
+            'souper.plone',
       ],
       entry_points="""
       [z3c.autoinclude.plugin]
