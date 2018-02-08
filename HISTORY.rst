@@ -4,6 +4,10 @@ History
 
 1.7.dev0
 -----
+
+- Depend on ``Products.CMFPlone`` instead of ``Plone`` to not fetch unnecessary dependencies.
+  [thet]
+
 - fixed autoinclude, Plone 5 compatibility
   [agitator]
 
